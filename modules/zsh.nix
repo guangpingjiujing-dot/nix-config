@@ -54,6 +54,15 @@
         # 1にすると ~/.c/nix-config のように各ディレクトリが1文字になる
         fish_style_pwd_dir_length = 1;
       };
+
+      python = {
+        # venvがアクティブなときだけ表示する（蛇の絵文字・バージョンは出さない）
+        # ''${...} は Nix 文字列内で ${ をエスケープする書き方
+        format = ''(''${virtualenv} )'';
+      };
+
+      # pyproject.toml / package.json などのバージョン表示を非表示にする
+      package.disabled = true;
     };
   };
 }

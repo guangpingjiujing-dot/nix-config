@@ -28,5 +28,6 @@
   home.packages = with pkgs; [
     claude-code  # Claude Code CLI
     tree         # ディレクトリ構造をツリー表示する
+    uv           # Python パッケージ・プロジェクト管理ツール
   ];
 }
