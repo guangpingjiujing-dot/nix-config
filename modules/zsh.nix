@@ -4,6 +4,12 @@
   programs.zsh = {
     enable = true;
 
+    # キーマップを emacs モードに固定する
+    # デフォルトでは $EDITOR に "vi" が含まれると vi モードになるため、
+    # programs.neovim.defaultEditor = true（EDITOR=nvim）を設定すると
+    # zsh が自動で vi モードに切り替わり Ctrl+F などが使えなくなる
+    defaultKeymap = "emacs";
+
     # コマンド入力中にシンタックスハイライトを表示する
     # 例: 存在するコマンドは緑、存在しないコマンドは赤
     syntaxHighlighting.enable = true;

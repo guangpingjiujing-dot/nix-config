@@ -7,6 +7,7 @@
     ./modules/gh.nix
     ./modules/ghostty.nix
     ./modules/git.nix
+    ./modules/neovim.nix
     ./modules/zsh.nix
   ];
 
@@ -21,4 +22,11 @@
 
   # home-manager自身をhome-managerで管理する（推奨設定）
   programs.home-manager.enable = true;
+
+  # home.packages: プログラム固有の設定が不要なツールをまとめてインストールする場所
+  # 設定ファイルが必要なツールは modules/ 配下で programs.<name> として管理する
+  home.packages = with pkgs; [
+    claude-code  # Claude Code CLI
+    tree         # ディレクトリ構造をツリー表示する
+  ];
 }

@@ -23,7 +23,11 @@
       # Intel Mac         → "x86_64-darwin"
       system = "aarch64-darwin";
 
-      pkgs = nixpkgs.legacyPackages.${system};
+      pkgs = import nixpkgs {
+        inherit system;
+        # unfreeライセンスのパッケージ（claude-codeなど）を許可する
+        config.allowUnfree = true;
+      };
     in
     {
       # home-managerの設定エントリーポイント
@@ -34,6 +38,12 @@
         # 読み込む設定ファイル
         # home.nixがルートで、そこから各モジュールをimportする
         modules = [ ./home.nix ];
+      };
+
+      # `nix run .#home-manager -- switch --flake .` で使えるようにする
+      apps.${system}.home-manager = {
+        type = "app";
+        program = "${home-manager.packages.${system}.home-manager}/bin/home-manager";
       };
     };
 }
