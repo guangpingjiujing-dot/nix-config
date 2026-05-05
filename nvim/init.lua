@@ -5,4 +5,5 @@ vim.g.mapleader = " "
 require("config.editor")
 require("config.colorscheme")
 require("config.neo-tree")
+require("config.telescope")
 require("config.claudecode")

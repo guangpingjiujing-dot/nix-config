@@ -29,5 +29,7 @@
     claude-code  # Claude Code CLI
     tree         # ディレクトリ構造をツリー表示する
     uv           # Python パッケージ・プロジェクト管理ツール
+    ripgrep      # 高速 grep（rg コマンド）
+    fd           # 高速 find（fd コマンド）
   ];
 }

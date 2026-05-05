@@ -21,9 +21,13 @@
       nvim-web-devicons  # ファイルアイコン（Nerd Font が必要）
       nui-nvim           # neo-tree の UI コンポーネント
 
+      telescope-nvim     # fuzzy finder
+      telescope-fzf-native-nvim  # ネイティブ fzf ソーターで高速化
+
       claudecode-nvim
       snacks-nvim        # claudecode-nvim の依存ライブラリ（ターミナル表示）
     ];
+
   };
 
   # nix-config/nvim/ の内容を ~/.config/nvim/ にリンクする
