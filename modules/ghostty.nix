@@ -41,14 +41,14 @@
       # 文字がウィンドウ端に張り付かないよう少し余白を入れる
       window-padding-x = 10;
       window-padding-y = 10;
-    };
 
-    keybindings = {
-      # ペインリサイズ（デフォルト10から拡大）
-      "ctrl+cmd+left"  = "resize_split:left,30";
-      "ctrl+cmd+right" = "resize_split:right,30";
-      "ctrl+cmd+up"    = "resize_split:up,30";
-      "ctrl+cmd+down"  = "resize_split:down,30";
+      # ペインリサイズのキーバインド（デフォルト10から拡大）
+      keybind = [
+        "ctrl+cmd+left=resize_split:left,30"
+        "ctrl+cmd+right=resize_split:right,30"
+        "ctrl+cmd+up=resize_split:up,30"
+        "ctrl+cmd+down=resize_split:down,30"
+      ];
     };
   };
 }

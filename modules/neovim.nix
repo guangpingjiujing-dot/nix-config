@@ -24,6 +24,8 @@
       telescope-nvim     # fuzzy finder
       telescope-fzf-native-nvim  # ネイティブ fzf ソーターで高速化
 
+      lualine-nvim       # ステータスライン
+
       claudecode-nvim
       snacks-nvim        # claudecode-nvim の依存ライブラリ（ターミナル表示）
     ];
