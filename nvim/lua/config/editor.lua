@@ -2,6 +2,12 @@
 -- 1回目の Esc は TUI アプリ（Claude Code 等）に渡し、2回連打で Neovim のノーマルモードへ戻る
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>")
 
+-- ウィンドウリサイズ（10行/列単位）
+vim.keymap.set("n", "<C-w>+", "<C-w>30+", { desc = "Increase height" })
+vim.keymap.set("n", "<C-w>-", "<C-w>30-", { desc = "Decrease height" })
+vim.keymap.set("n", "<C-w>>", "<C-w>30>", { desc = "Increase width" })
+vim.keymap.set("n", "<C-w><", "<C-w>30<", { desc = "Decrease width" })
+
 -- ウィンドウ間の移動（LazyVim 標準の <C-hjkl>）
 -- ターミナルモードでも同じキーで移動できるようにする（Claude Code 動作中でもペイン移動可能）
 vim.keymap.set("n", "<C-h>", "<C-w>h")
@@ -14,11 +20,17 @@ vim.keymap.set("t", "<C-k>", "<C-\\><C-n><C-w>k")
 vim.keymap.set("t", "<C-l>", "<C-\\><C-n><C-w>l")
 
 -- 現在のバッファを閉じて次のバッファをそのウィンドウに表示する
+-- neo-tree が全画面になるのを防ぐため、先に別バッファへ切り替えてから削除する
 vim.keymap.set("n", "<leader>bd", function()
   local cur = vim.fn.bufnr()
-  vim.cmd("bnext")
-  vim.cmd("bd " .. cur)
-end, { desc = "Close buffer" })
+  local others = vim.tbl_filter(function(b)
+    return vim.bo[b].buflisted and b ~= cur
+  end, vim.api.nvim_list_bufs())
+  if #others > 0 then
+    vim.api.nvim_set_current_buf(others[1])
+  end
+  vim.api.nvim_buf_delete(cur, { force = false })
+end, { desc = "Delete buffer (preserve layout)" })
 
 -- 長い行を折り返さない
 vim.opt.wrap = false

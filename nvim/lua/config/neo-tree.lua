@@ -1,5 +1,6 @@
 require("neo-tree").setup({
   window = {
+    position = "left",
     width = 30,
   },
   filesystem = {
@@ -11,7 +12,7 @@ require("neo-tree").setup({
 })
 
 -- <Space>e でファイルツリーを開閉（LazyVim のデフォルトと同じ）
-vim.keymap.set("n", "<leader>e", ":Neotree toggle<CR>", {
+vim.keymap.set("n", "<leader>e", ":Neotree toggle position=left<CR>", {
   silent = true,
   desc = "Toggle file tree",
 })
