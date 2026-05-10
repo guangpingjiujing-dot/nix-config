@@ -31,5 +31,6 @@
     uv           # Python パッケージ・プロジェクト管理ツール
     ripgrep      # 高速 grep（rg コマンド）
     fd           # 高速 find（fd コマンド）
+    macism       # macOS 入力ソース切り替え CLI（Neovim の Insert 離脱時に ABC へ戻す）
   ];
 }

@@ -28,6 +28,12 @@
 
       claudecode-nvim
       snacks-nvim        # claudecode-nvim の依存ライブラリ（ターミナル表示）
+
+      which-key-nvim     # キーバインドのポップアップヘルプ
+
+      neogit             # git status パネル（Magit ライク）
+      gitsigns-nvim      # エディタ左端の git 差分サイン
+      diffview-nvim      # サイドバイサイド diff ビュー（Neogit と連携）
     ];
 
   };

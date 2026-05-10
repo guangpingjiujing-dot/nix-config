@@ -62,6 +62,20 @@
         format = ''(''${virtualenv} )'';
       };
 
+      # git の変更状態をシンボル＋ファイル数で表示する
+      # !3+2 のように各状態が何ファイルあるか分かるようにする
+      git_status = {
+        modified  = ''!''${count}'';
+        staged    = ''+''${count}'';
+        deleted   = ''✘''${count}'';
+        renamed   = ''»''${count}'';
+        untracked = ''?''${count}'';
+        stashed   = ''$''${count}'';
+        ahead     = ''⇡''${count}'';
+        behind    = ''⇣''${count}'';
+        diverged  = ''⇕⇡''${ahead_count}⇣''${behind_count}'';
+      };
+
       # pyproject.toml / package.json などのバージョン表示を非表示にする
       package.disabled = true;
     };

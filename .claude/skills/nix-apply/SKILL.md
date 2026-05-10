@@ -7,11 +7,19 @@ when_to_use: Use after editing any file in nix-config/ to apply the changes. Req
 
 nix-config への変更を実環境に反映するスキル。
 
-## 適用コマンド
+## 適用手順
+
+**新しいファイルを追加した場合**、先に `git add` が必要。Nix flake はステージされたファイルのみをビルドに含めるため、未追跡ファイルはNixストアに含まれない。
 
 ```bash
+# 新規ファイルがある場合は先に git add
+git add <新しいファイル>
+
+# 適用
 home-manager switch --flake ~/.config/nix-config
 ```
+
+既存ファイルの編集のみの場合は `git add` 不要。
 
 ## 重要な仕組み
 
@@ -36,3 +44,4 @@ home-manager switch --flake ~/.config/nix-config
 
 - 「Lua ファイルを編集したので Neovim の再起動だけでよい」→ **誤り**
 - 「シンボリックリンクだから即座に反映される」→ **誤り**（リンク先は Nix ストアのスナップショット）
+- 「`home-manager switch` したのに新しいファイルが反映されない」→ `git add` 忘れ（untracked ファイルはビルドに含まれない）
