@@ -32,6 +32,9 @@ vim.keymap.set("n", "<leader>bd", function()
   vim.api.nvim_buf_delete(cur, { force = false })
 end, { desc = "Delete buffer (preserve layout)" })
 
+-- 行番号を表示する（絶対行番号）
+vim.opt.number = true
+
 -- 長い行を折り返さない
 vim.opt.wrap = false
 

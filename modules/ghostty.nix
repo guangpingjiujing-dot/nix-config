@@ -26,6 +26,7 @@
       # "Mono"サフィックスは等幅グリフを優先するバリアント（ターミナル向け）
       font-family = "JetBrainsMono Nerd Font Mono";
       font-size = 14;
+      font-feature = ["-liga" "-calt"];
 
       # カラーテーマ（Ghostty組み込みのテーマ名を指定）
       # 利用可能なテーマ一覧: ghostty +list-themes

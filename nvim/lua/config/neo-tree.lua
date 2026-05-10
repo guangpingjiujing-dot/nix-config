@@ -3,6 +3,14 @@ require("neo-tree").setup({
     position = "left",
     width = 30,
   },
+  event_handlers = {
+    {
+      event = "neo_tree_buffer_enter",
+      handler = function()
+        vim.opt_local.number = true
+      end,
+    },
+  },
   filesystem = {
     use_libuv_file_watcher = true,
     filtered_items = {
