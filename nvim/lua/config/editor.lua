@@ -32,6 +32,11 @@ vim.keymap.set("n", "<leader>bd", function()
   vim.api.nvim_buf_delete(cur, { force = false })
 end, { desc = "Delete buffer (preserve layout)" })
 
+-- バッファのパスをクリップボードにコピー
+vim.keymap.set("n", "<leader>yn", function() vim.fn.setreg("+", vim.fn.expand("%:t")) end, { desc = "Yank filename" })
+vim.keymap.set("n", "<leader>yp", function() vim.fn.setreg("+", vim.fn.expand("%:.")) end, { desc = "Yank relative path" })
+vim.keymap.set("n", "<leader>yP", function() vim.fn.setreg("+", vim.fn.expand("%:p")) end, { desc = "Yank absolute path" })
+
 -- 行番号を表示する（絶対行番号）
 vim.opt.number = true
 
