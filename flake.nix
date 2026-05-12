@@ -18,22 +18,24 @@
 
   outputs = { nixpkgs, home-manager, ... }:
     let
-      # 使用するシステムアーキテクチャ
-      # Apple Silicon Mac → "aarch64-darwin"
-      # Intel Mac         → "x86_64-darwin"
-      system = "aarch64-darwin";
+      # マシン固有の設定（ユーザー名・ホームディレクトリ・アーキテクチャ）
+      # クローン後に local.nix を自分の環境に合わせて編集する（README 参照）。
+      local = import ./local.nix;
 
       pkgs = import nixpkgs {
-        inherit system;
+        system = local.system;
         # unfreeライセンスのパッケージ（claude-codeなど）を許可する
         config.allowUnfree = true;
       };
     in
     {
       # home-managerの設定エントリーポイント
-      # キーのユーザー名はシステムのユーザー名と一致させる必要がある
-      homeConfigurations."kouheisakai" = home-manager.lib.homeManagerConfiguration {
+      # キーのユーザー名は local.nix の username と一致する
+      homeConfigurations."${local.username}" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
+
+        # マシン固有の値を各モジュールへ渡す
+        extraSpecialArgs = { inherit (local) username homeDirectory gitName gitEmail; };
 
         # 読み込む設定ファイル
         # home.nixがルートで、そこから各モジュールをimportする
@@ -41,9 +43,9 @@
       };
 
       # `nix run .#home-manager -- switch --flake .` で使えるようにする
-      apps.${system}.home-manager = {
+      apps.${local.system}.home-manager = {
         type = "app";
-        program = "${home-manager.packages.${system}.home-manager}/bin/home-manager";
+        program = "${home-manager.packages.${local.system}.home-manager}/bin/home-manager";
       };
     };
 }

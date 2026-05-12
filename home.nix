@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, username, homeDirectory, ... }:
 
 {
   imports = [
@@ -11,9 +11,9 @@
     ./modules/zsh.nix
   ];
 
-  # home-managerが管理するユーザー名とホームディレクトリ
-  home.username = "kouheisakai";
-  home.homeDirectory = "/Users/kouheisakai";
+  # マシン固有の値は local.nix → flake.nix の extraSpecialArgs 経由で渡される
+  home.username = username;
+  home.homeDirectory = homeDirectory;
 
   # このhome-managerのバージョン設定
   # バージョンアップ時に後方互換性の変更を制御するために使用する
