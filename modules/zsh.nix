@@ -70,7 +70,7 @@
         deleted   = ''✘''${count}'';
         renamed   = ''»''${count}'';
         untracked = ''?''${count}'';
-        stashed   = ''$''${count}'';
+        stashed   = ''\$''${count}'';
         ahead     = ''⇡''${count}'';
         behind    = ''⇣''${count}'';
         diverged  = ''⇕⇡''${ahead_count}⇣''${behind_count}'';

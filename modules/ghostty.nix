@@ -53,6 +53,7 @@
         "ctrl+cmd+up=resize_split:up,30"
         "ctrl+cmd+down=resize_split:down,30"
         "global:ctrl+`=toggle_quick_terminal"
+        "cmd+i=prompt_tab_title"
       ];
     };
   };
