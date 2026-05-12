@@ -28,6 +28,16 @@
 
       claudecode-nvim
       snacks-nvim        # claudecode-nvim の依存ライブラリ（ターミナル表示）
+
+      (pkgs.vimUtils.buildVimPlugin {
+        name = "winresizer";
+        src = pkgs.fetchFromGitHub {
+          owner = "simeji";
+          repo = "winresizer";
+          rev = "v1.1.1";
+          hash = "sha256-JH0FHAKdxMbKWcoBlTdoSG+8f9MYoxif5MpzJSeDqyI=";
+        };
+      })
     ];
 
   };
