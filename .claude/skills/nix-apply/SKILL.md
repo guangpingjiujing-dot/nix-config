@@ -15,9 +15,11 @@ nix-config への変更を実環境に反映するスキル。
 # 新規ファイルがある場合は先に git add
 git add <新しいファイル>
 
-# 適用
-home-manager switch --flake ~/.config/nix-config
+# 適用（nix-configリポジトリのルートパスを使う）
+home-manager switch --flake <nix-configのリポジトリルート>
 ```
+
+リポジトリのルートパスは `git rev-parse --show-toplevel` で取得すること。パスをハードコードしてはいけない。
 
 既存ファイルの編集のみの場合は `git add` 不要。
 
