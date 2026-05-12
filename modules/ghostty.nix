@@ -43,6 +43,9 @@
       window-padding-x = 10;
       window-padding-y = 10;
 
+      # 選択するだけでクリップボードにコピー
+      copy-on-select = "clipboard";
+
       # ペインリサイズのキーバインド（デフォルト10から拡大）
       keybind = [
         "ctrl+cmd+left=resize_split:left,30"
