@@ -54,6 +54,10 @@
         "ctrl+cmd+down=resize_split:down,30"
         "global:ctrl+`=toggle_quick_terminal"
         "cmd+i=prompt_tab_title"
+        # デフォルトの super+arrow_right=text:\x05 (ctrl+e) を上書きする
+        # \x05 はNeovimのターミナルモードでリサイズモードに入るキーバインドと衝突するため、
+        # End キーシーケンス (\x1b[F) に変更して行末移動を維持しつつ衝突を回避する
+        "super+arrow_right=text:\\x1b[F"
       ];
     };
   };

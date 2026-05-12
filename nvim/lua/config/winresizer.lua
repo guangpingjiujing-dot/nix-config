@@ -9,3 +9,6 @@ vim.g.winresizer_horiz_resize = 3
 -- ターミナルモード（Claude Code 等）でも <C-e> でリサイズモードに入れるようにする
 -- ターミナルモードでは <C-e> が端末アプリに渡るため、明示的にノーマルモード経由でトリガーする
 vim.keymap.set("t", "<C-e>", "<C-\\><C-n>:WinResizerStartResize<CR>", { desc = "Enter resize mode from terminal" })
+
+-- <C-Right> がターミナルモードでリサイズモードに誤って起動されないようパススルーする
+vim.keymap.set("t", "<C-Right>", "<C-Right>", { desc = "Pass ctrl+right to terminal" })
