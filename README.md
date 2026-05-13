@@ -66,6 +66,18 @@ nix run .#home-manager -- switch --flake .
     "type": "command",
     "command": "$HOME/.config/claude/statusline.sh",
     "refreshInterval": 30
+  },
+  "permissions": {
+    "allow": [
+      "Read",
+      "WebSearch",
+      "WebFetch",
+      "Bash(git *)",
+      "Bash(ls *)",
+      "Bash(find *)",
+      "Bash(grep *)",
+      "Bash(rg *)"
+    ]
   }
 }
 ```
