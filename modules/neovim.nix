@@ -29,6 +29,8 @@
       claudecode-nvim
       snacks-nvim        # claudecode-nvim の依存ライブラリ（ターミナル表示）
 
+      toggleterm-nvim    # フローティングターミナル
+
       (pkgs.vimUtils.buildVimPlugin {
         name = "winresizer";
         src = pkgs.fetchFromGitHub {
