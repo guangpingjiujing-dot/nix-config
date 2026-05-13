@@ -1,7 +1,3 @@
--- ターミナルモードから <Esc><Esc> でノーマルモードに戻る
--- 1回目の Esc は TUI アプリ（Claude Code 等）に渡し、2回連打で Neovim のノーマルモードへ戻る
-vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>")
-
 -- ウィンドウリサイズ（10行/列単位）
 vim.keymap.set("n", "<C-w>+", "<C-w>30+", { desc = "Increase height" })
 vim.keymap.set("n", "<C-w>-", "<C-w>30-", { desc = "Decrease height" })
