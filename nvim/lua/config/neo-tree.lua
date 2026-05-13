@@ -1,7 +1,12 @@
 require("neo-tree").setup({
+  default_component_configs = {
+    file_size = { enabled = false },
+    type = { enabled = false },
+    last_modified = { enabled = false },
+  },
   window = {
     position = "left",
-    width = 30,
+    width = 45,
   },
   event_handlers = {
     {
