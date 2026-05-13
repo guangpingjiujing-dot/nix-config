@@ -59,7 +59,10 @@
       python = {
         # venvがアクティブなときだけ表示する（蛇の絵文字・バージョンは出さない）
         # ''${...} は Nix 文字列内で ${ をエスケープする書き方
-        format = ''(''${virtualenv} )'';
+        format = ''\(''${virtualenv}\) '';
+        # VIRTUAL_ENV がセットされていれば（＝venvがactive）、
+        # Pythonファイルがないディレクトリでも常に表示する
+        detect_env_vars = [ "VIRTUAL_ENV" ];
       };
 
       # git の変更状態をシンボル＋ファイル数で表示する
