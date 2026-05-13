@@ -4,6 +4,7 @@
   imports = [
     # 各ツールの設定は責任ごとにファイルを分割してここでまとめる
     # 新しいツールを追加する際はmodules/配下にファイルを作成してimportする
+    ./modules/claude.nix
     ./modules/gh.nix
     ./modules/ghostty.nix
     ./modules/git.nix
