@@ -53,12 +53,15 @@ nix run .#home-manager -- switch --flake .
 | [Docker Desktop](https://www.docker.com/products/docker-desktop/) | macOSのシステム統合が必要なため | 公式サイトから .dmg をダウンロード |
 | Claude Code ステータスライン | `~/.claude/settings.json` はClaude Codeが書き込むためNix管理外 | 下記参照 |
 
-#### Claude Code ステータスライン設定
+#### Claude Code 設定（`~/.claude/settings.json`）
 
+マシン固有の設定（会社用プラグイン等）が混在するためNix管理外。
 `~/.claude/settings.json` に以下を追記する：
 
 ```json
 {
+  "theme": "dark",
+  "verbose": true,
   "statusLine": {
     "type": "command",
     "command": "$HOME/.config/claude/statusline.sh",
