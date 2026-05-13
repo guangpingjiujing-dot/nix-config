@@ -48,9 +48,26 @@ nix run .#home-manager -- switch --flake .
 
 以下はNix管理外のため、別途インストールする：
 
-| ツール | 理由 | インストール先 |
+| ツール | 理由 | 手順 |
 |---|---|---|
 | [Docker Desktop](https://www.docker.com/products/docker-desktop/) | macOSのシステム統合が必要なため | 公式サイトから .dmg をダウンロード |
+| Claude Code ステータスライン | `~/.claude/settings.json` はClaude Codeが書き込むためNix管理外 | 下記参照 |
+
+#### Claude Code ステータスライン設定
+
+`~/.claude/settings.json` に以下を追記する：
+
+```json
+{
+  "statusLine": {
+    "type": "command",
+    "command": "$HOME/.config/claude/statusline.sh",
+    "refreshInterval": 30
+  }
+}
+```
+
+スクリプト本体（`~/.config/claude/statusline.sh`）は `home-manager switch` で自動的に配置される。
 
 ## 構成
 
@@ -61,11 +78,14 @@ nix-config/
 ├── local.example.nix    # local.nix のテンプレート
 ├── local.nix            # マシン固有の設定（クローン後に編集する）
 ├── modules/
+│   ├── claude.nix       # Claude Code（jq・ステータスラインスクリプト）
 │   ├── ghostty.nix      # ターミナル（Ghostty）
 │   ├── git.nix          # Git
 │   ├── gh.nix           # GitHub CLI
 │   ├── neovim.nix       # Neovim（プラグイン宣言のみ）
 │   └── zsh.nix          # zsh・Starship
+├── claude/
+│   └── statusline.sh    # Claude Codeステータスライン（~/.config/claude/にリンク）
 └── nvim/                # Neovim設定（Lua）
     ├── init.lua
     └── lua/config/
