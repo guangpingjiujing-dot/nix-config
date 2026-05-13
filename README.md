@@ -120,6 +120,10 @@ nix-config/
         ├── editor.lua       # autoread等の基本設定
         ├── colorscheme.lua  # TokyoNight
         ├── neo-tree.lua     # ファイルツリー
+        ├── telescope.lua    # fuzzy finder
+        ├── lualine.lua      # ステータスライン・タブライン
+        ├── toggleterm.lua   # フローティングターミナル
+        ├── winresizer.lua   # ウィンドウリサイズ
         └── claudecode.lua   # Claude Code連携
 ```
 

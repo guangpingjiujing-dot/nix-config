@@ -17,4 +17,6 @@
       line-numbers = true;
     };
   };
+
+  programs.git.settings.diff.colorMoved = "default";
 }

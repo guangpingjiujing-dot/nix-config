@@ -1,9 +1,3 @@
--- ウィンドウリサイズ（10行/列単位）
-vim.keymap.set("n", "<C-w>+", "<C-w>30+", { desc = "Increase height" })
-vim.keymap.set("n", "<C-w>-", "<C-w>30-", { desc = "Decrease height" })
-vim.keymap.set("n", "<C-w>>", "<C-w>30>", { desc = "Increase width" })
-vim.keymap.set("n", "<C-w><", "<C-w>30<", { desc = "Decrease width" })
-
 -- ウィンドウ間の移動（LazyVim 標準の <C-hjkl>）
 -- ターミナルモードでも同じキーで移動できるようにする（Claude Code 動作中でもペイン移動可能）
 vim.keymap.set("n", "<C-h>", "<C-w>h")
