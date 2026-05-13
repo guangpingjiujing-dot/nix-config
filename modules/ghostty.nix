@@ -46,6 +46,9 @@
       # 選択するだけでクリップボードにコピー
       copy-on-select = "clipboard";
 
+      # 右クリック（2本指タップ）でクリップボードから貼り付け
+      right-click-action = "paste";
+
       # ペインリサイズのキーバインド（デフォルト10から拡大）
       keybind = [
         "ctrl+cmd+left=resize_split:left,30"
