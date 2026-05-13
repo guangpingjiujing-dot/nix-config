@@ -1,5 +1,21 @@
 require("claudecode").setup()
 
+-- /copy コマンドが送る OSC 52 を Ghostty にパススルーする。
+-- Neovim がこのシーケンスを内部処理すると改行が失われるため、
+-- 外側のターミナルに転送して Ghostty に直接クリップボードへ書かせる。
+vim.api.nvim_create_autocmd("TermRequest", {
+  callback = function(args)
+    if type(args.data) == "table" and args.data.sequence then
+      local seq = args.data.sequence
+      if seq:match("^\027]52;") then
+        io.write(seq .. "\a")
+        io.flush()
+        return true
+      end
+    end
+  end,
+})
+
 -- README 推奨のキーバインド
 -- <leader> = Space（init.lua で設定済み）
 vim.keymap.set("n", "<leader>ac", "<cmd>ClaudeCode<cr>",            { desc = "Toggle Claude" })
