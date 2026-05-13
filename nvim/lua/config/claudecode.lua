@@ -1,4 +1,9 @@
-require("claudecode").setup()
+require("claudecode").setup({
+  diff_opts = {
+    open_in_new_tab = true,
+    hide_terminal_in_new_tab = false,
+  },
+})
 
 -- /copy コマンドが送る OSC 52 を Ghostty にパススルーする。
 -- Neovim がこのシーケンスを内部処理すると改行が失われるため、

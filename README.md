@@ -75,8 +75,21 @@ nix run .#home-manager -- switch --flake .
       "Bash(git *)",
       "Bash(ls *)",
       "Bash(find *)",
+      "Bash(find * | head *)",
+      "Bash(find * | grep *)",
       "Bash(grep *)",
-      "Bash(rg *)"
+      "Bash(rg *)",
+      "Bash(head *)",
+      "Bash(cat *)",
+      "Bash(wc *)",
+      "Bash(sort *)",
+      "Bash(uniq *)",
+      "Bash(awk *)",
+      "Bash(sed *)",
+      "Bash(ghostty *)",
+      "Bash(nix eval *)",
+      "Bash(nix search *)",
+      "Bash(starship *)"
     ]
   }
 }
