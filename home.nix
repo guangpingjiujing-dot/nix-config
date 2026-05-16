@@ -27,11 +27,13 @@
   # home.packages: プログラム固有の設定が不要なツールをまとめてインストールする場所
   # 設定ファイルが必要なツールは modules/ 配下で programs.<name> として管理する
   home.packages = with pkgs; [
-    claude-code  # Claude Code CLI
-    tree         # ディレクトリ構造をツリー表示する
-    uv           # Python パッケージ・プロジェクト管理ツール
-    ripgrep      # 高速 grep（rg コマンド）
-    fd           # 高速 find（fd コマンド）
-    macism       # macOS 入力ソース切り替え CLI（Neovim の Insert 離脱時に ABC へ戻す）
+    claude-code        # Claude Code CLI
+    tree               # ディレクトリ構造をツリー表示する
+    uv                 # Python パッケージ・プロジェクト管理ツール
+    ripgrep            # 高速 grep（rg コマンド）
+    fd                 # 高速 find（fd コマンド）
+    macism             # macOS 入力ソース切り替え CLI（Neovim の Insert 離脱時に ABC へ戻す）
+    awscli2            # AWS CLI v2
+    google-cloud-sdk   # Google Cloud CLI（gcloud, gsutil, bq）
   ];
 }
