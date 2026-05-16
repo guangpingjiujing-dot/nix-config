@@ -35,5 +35,19 @@
     macism             # macOS 入力ソース切り替え CLI（Neovim の Insert 離脱時に ABC へ戻す）
     awscli2            # AWS CLI v2
     google-cloud-sdk   # Google Cloud CLI（gcloud, gsutil, bq）
+
+    # Python インタープリタ（複数バージョンをグローバルで利用可能にする）
+    # python312 をデフォルトの python3 とし、他バージョンはバージョン付きバイナリのみ公開する。
+    # 全バージョンをそのまま追加すると idle/python3 等のバイナリが衝突するため、
+    # python3.11 / python3.13 はラッパー経由でバージョン固有のバイナリだけを公開する。
+    python312
+    (runCommand "python311-versioned" {} ''
+      mkdir -p $out/bin
+      ln -s ${python311}/bin/python3.11 $out/bin/python3.11
+    '')
+    (runCommand "python313-versioned" {} ''
+      mkdir -p $out/bin
+      ln -s ${python313}/bin/python3.13 $out/bin/python3.13
+    '')
   ];
 }
