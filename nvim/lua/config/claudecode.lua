@@ -5,6 +5,78 @@ require("claudecode").setup({
   },
 })
 
+-- Single-pane display for new file creation (no empty "before" pane)
+local ok, diff_mod = pcall(require, "claudecode.diff")
+if ok then
+  local orig_create = diff_mod._create_diff_view_from_window
+  diff_mod._create_diff_view_from_window = function(
+    target_window, old_file_path, new_buffer, tab_name, is_new_file,
+    terminal_win_in_new_tab, existing_buffer
+  )
+    if not is_new_file then
+      return orig_create(
+        target_window, old_file_path, new_buffer, tab_name, is_new_file,
+        terminal_win_in_new_tab, existing_buffer
+      )
+    end
+
+    if target_window then
+      -- Non-new-tab mode: create diff normally, then close the empty left pane
+      local result = orig_create(
+        target_window, old_file_path, new_buffer, tab_name, is_new_file,
+        terminal_win_in_new_tab, existing_buffer
+      )
+      if result.target_window and result.target_window ~= result.new_window
+        and vim.api.nvim_win_is_valid(result.target_window)
+      then
+        pcall(vim.api.nvim_win_call, result.new_window, function() vim.cmd("diffoff") end)
+        pcall(vim.api.nvim_win_close, result.target_window, true)
+        if vim.api.nvim_win_is_valid(result.new_window) then
+          vim.api.nvim_set_current_win(result.new_window)
+        end
+      end
+      return result
+    end
+
+    -- New-tab mode (target_window == nil): place content in the current main window
+    -- without creating any split. Terminal width was already set by display_terminal_in_new_tab.
+    local win = vim.api.nvim_get_current_win()
+    vim.api.nvim_win_set_buf(win, new_buffer)
+
+    local ft
+    if vim.filetype and type(vim.filetype.match) == "function" then
+      local ft_ok, detected = pcall(vim.filetype.match, { filename = old_file_path })
+      if ft_ok then ft = detected end
+    end
+    if ft and ft ~= "" then
+      vim.api.nvim_set_option_value("filetype", ft, { buf = new_buffer })
+    end
+
+    -- Green highlight on content lines only (not empty space below last line)
+    vim.api.nvim_set_hl(0, "ClaudeCodeNewFileLine", { bg = "#1e3d20" })
+    local ns = vim.api.nvim_create_namespace("claudecode_new_file")
+    local line_count = vim.api.nvim_buf_line_count(new_buffer)
+    for i = 0, line_count - 1 do
+      vim.api.nvim_buf_set_extmark(new_buffer, ns, i, 0, {
+        line_hl_group = "ClaudeCodeNewFileLine",
+        priority = 100,
+      })
+    end
+
+    vim.b[new_buffer].claudecode_diff_tab_name = tab_name
+    vim.b[new_buffer].claudecode_diff_new_win = win
+    vim.b[new_buffer].claudecode_diff_target_win = win
+
+    return {
+      new_window = win,
+      target_window = nil,
+      target_window_created_by_plugin = false,
+      original_buffer = nil,
+      original_buffer_created_by_plugin = false,
+    }
+  end
+end
+
 -- /copy コマンドが送る OSC 52 を Ghostty にパススルーする。
 -- Neovim がこのシーケンスを内部処理すると改行が失われるため、
 -- 外側のターミナルに転送して Ghostty に直接クリップボードへ書かせる。
