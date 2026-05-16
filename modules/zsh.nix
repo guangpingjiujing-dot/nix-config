@@ -21,7 +21,7 @@
     # エイリアス（コマンドの短縮形）
     shellAliases = {
       # macOSのlsはBSD版のため -G でカラー表示になる
-      ls = "ls -G";
+      ls = "ls -laG";   # デフォルトで詳細表示＋隠しファイル表示
       ll = "ls -lhG";   # 詳細表示
       la = "ls -lahG";  # 隠しファイルも含めた詳細表示
       vim = "nvim";
