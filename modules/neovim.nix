@@ -33,6 +33,8 @@
 
       gitsigns-nvim      # git 差分をサインカラムに表示
 
+      nvim-scrollbar     # スクロールバー
+
       (pkgs.vimUtils.buildVimPlugin {
         name = "winresizer";
         src = pkgs.fetchFromGitHub {
@@ -40,6 +42,16 @@
           repo = "winresizer";
           rev = "v1.1.1";
           hash = "sha256-JH0FHAKdxMbKWcoBlTdoSG+8f9MYoxif5MpzJSeDqyI=";
+        };
+      })
+
+      (pkgs.vimUtils.buildVimPlugin {
+        name = "accelerated-jk-nvim";
+        src = pkgs.fetchFromGitHub {
+          owner = "rainbowhxch";
+          repo = "accelerated-jk.nvim";
+          rev = "8fb5dad4ccc1811766cebf16b544038aeeb7806f";
+          hash = "sha256-zpjqCARlQU6g50s8wpaqN9xFK4tdUbrxU6MJrQZfSA8=";
         };
       })
     ];
