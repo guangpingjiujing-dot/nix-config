@@ -30,6 +30,9 @@ vim.keymap.set("n", "<leader>yP", function() vim.fn.setreg("+", vim.fn.expand("%
 -- 行番号を表示する（絶対行番号）
 vim.opt.number = true
 
+-- サインカラムを常に表示（gitsigns 等のサインが消えないようにする）
+vim.opt.signcolumn = "yes:2"
+
 -- 長い行を折り返さない
 vim.opt.wrap = false
 

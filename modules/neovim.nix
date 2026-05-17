@@ -31,6 +31,8 @@
 
       toggleterm-nvim    # フローティングターミナル
 
+      gitsigns-nvim      # git 差分をサインカラムに表示
+
       (pkgs.vimUtils.buildVimPlugin {
         name = "winresizer";
         src = pkgs.fetchFromGitHub {
