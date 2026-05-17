@@ -5,8 +5,9 @@ local previewers = require("telescope.previewers")
 telescope.setup({
   defaults = {
     layout_config = {
-      width = 0.9,
-      height = 0.9,
+      width = 0.95,
+      height = 0.95,
+      preview_width = 0.6,
     },
     path_display = { "truncate" },
   },
@@ -16,6 +17,13 @@ telescope.setup({
 })
 
 telescope.load_extension("fzf")
+
+vim.api.nvim_create_autocmd("User", {
+  pattern = "TelescopePreviewerLoaded",
+  callback = function()
+    vim.wo.number = true
+  end,
+})
 
 local delta_previewer = previewers.new_termopen_previewer({
   get_command = function(entry)
