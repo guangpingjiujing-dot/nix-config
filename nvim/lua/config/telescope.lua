@@ -2,6 +2,13 @@ local telescope = require("telescope")
 local builtin = require("telescope.builtin")
 
 telescope.setup({
+  defaults = {
+    layout_config = {
+      width = 0.9,
+      height = 0.9,
+    },
+    path_display = { "truncate" },
+  },
   extensions = {
     fzf = {},
   },
