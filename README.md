@@ -68,6 +68,16 @@ nix run .#home-manager -- switch --flake .
     "refreshInterval": 30
   },
   "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay /System/Library/Sounds/Submarine.aiff && afplay /System/Library/Sounds/Submarine.aiff"
+          }
+        ]
+      }
+    ],
     "PermissionRequest": [
       {
         "hooks": [
