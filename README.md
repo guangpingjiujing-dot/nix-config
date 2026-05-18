@@ -89,7 +89,9 @@ nix run .#home-manager -- switch --flake .
       "Bash(ghostty *)",
       "Bash(nix eval *)",
       "Bash(nix search *)",
-      "Bash(starship *)"
+      "Bash(starship *)",
+      "Bash(gh *)",
+      "Bash(gcloud secrets list *)"
     ]
   }
 }

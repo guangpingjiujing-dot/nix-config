@@ -93,6 +93,18 @@ vim.api.nvim_create_autocmd("TermRequest", {
   end,
 })
 
+-- proposed diff バッファで Insert モードに入ったら即 Normal モードに戻す
+vim.api.nvim_create_autocmd("InsertEnter", {
+  callback = function()
+    local name = vim.api.nvim_buf_get_name(0)
+    if name:match("%[Claude Code%]") and name:match("%(proposed%)") then
+      vim.schedule(function()
+        vim.cmd("stopinsert")
+      end)
+    end
+  end,
+})
+
 -- README 推奨のキーバインド
 -- <leader> = Space（init.lua で設定済み）
 vim.keymap.set("n", "<leader>ac", "<cmd>ClaudeCode<cr>",            { desc = "Toggle Claude" })
