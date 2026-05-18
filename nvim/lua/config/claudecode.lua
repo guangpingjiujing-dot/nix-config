@@ -93,6 +93,18 @@ vim.api.nvim_create_autocmd("TermRequest", {
   end,
 })
 
+-- Diff view が開いたら最初の変更箇所にジャンプしてウィンドウ中央に表示
+vim.api.nvim_create_autocmd("BufWinEnter", {
+  callback = function()
+    local name = vim.api.nvim_buf_get_name(0)
+    if name:match("%[Claude Code%]") and name:match("%(proposed%)") then
+      vim.schedule(function()
+        vim.cmd("normal! gg]czz")
+      end)
+    end
+  end,
+})
+
 -- proposed diff バッファで Insert モードに入ったら即 Normal モードに戻す
 vim.api.nvim_create_autocmd("InsertEnter", {
   callback = function()

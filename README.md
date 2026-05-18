@@ -114,7 +114,24 @@ nix run .#home-manager -- switch --flake .
       "Bash(nix search *)",
       "Bash(starship *)",
       "Bash(gh *)",
-      "Bash(gcloud secrets list *)"
+      "Bash(gcloud secrets list *)",
+      "Bash(tail *)",
+      "Bash(echo *)",
+      "Bash(jq *)",
+      "Bash(mkdir *)",
+      "Bash(touch *)",
+      "Bash(diff *)",
+      "Bash(which *)",
+      "Bash(cut *)",
+      "Bash(tr *)",
+      "Bash(xargs *)",
+      "Bash(dbt compile *)",
+      "Bash(dbt parse *)",
+      "Bash(dbt ls *)",
+      "Bash(dbt list *)",
+      "Bash(dbt debug *)",
+      "Bash(dbt deps *)",
+      "Bash(dbt docs *)"
     ]
   }
 }
