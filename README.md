@@ -73,7 +73,7 @@ nix run .#home-manager -- switch --flake .
         "hooks": [
           {
             "type": "command",
-            "command": "afplay /System/Library/Sounds/Submarine.aiff && afplay /System/Library/Sounds/Submarine.aiff"
+            "command": "afplay /System/Library/Sounds/Submarine.aiff & sleep 0.5 && afplay /System/Library/Sounds/Submarine.aiff"
           }
         ]
       }
