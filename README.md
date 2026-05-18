@@ -67,6 +67,19 @@ nix run .#home-manager -- switch --flake .
     "command": "$HOME/.config/claude/statusline.sh",
     "refreshInterval": 30
   },
+  "hooks": {
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay /System/Library/Sounds/Glass.aiff",
+            "async": true
+          }
+        ]
+      }
+    ]
+  },
   "permissions": {
     "allow": [
       "Read",
