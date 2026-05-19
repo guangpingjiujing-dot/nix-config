@@ -35,6 +35,9 @@
     macism             # macOS 入力ソース切り替え CLI（Neovim の Insert 離脱時に ABC へ戻す）
     awscli2            # AWS CLI v2
     google-cloud-sdk   # Google Cloud CLI（gcloud, gsutil, bq）
+    pyenv              # Python バージョン管理ツール
+    nodejs             # Node.js（npm を含む）
+    supabase-cli       # Supabase CLI（supabase コマンド）
 
     # Python インタープリタ（複数バージョンをグローバルで利用可能にする）
     # python312 をデフォルトの python3 とし、他バージョンはバージョン付きバイナリのみ公開する。

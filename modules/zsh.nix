@@ -27,6 +27,10 @@
       vim = "nvim";
     };
 
+    initContent = ''
+      eval "$(pyenv init -)"
+    '';
+
     # コマンド履歴の設定
     history = {
       size = 10000;       # メモリ上に保持する件数
