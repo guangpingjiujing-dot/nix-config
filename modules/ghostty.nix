@@ -44,8 +44,8 @@
       window-padding-y = 10;
 
       # 背景の不透明度（0.0=完全透明 〜 1.0=完全不透明）
-      # cmd+shift+o で 70% ↔ 100% をトグルできる
-      background-opacity = 0.7;
+      # cmd+shift+o で 60% ↔ 100% をトグルできる
+      background-opacity = 0.6;
 
       # 選択するだけでクリップボードにコピー
       copy-on-select = "clipboard";
@@ -65,7 +65,7 @@
         # \x05 はNeovimのターミナルモードでリサイズモードに入るキーバインドと衝突するため、
         # End キーシーケンス (\x1b[F) に変更して行末移動を維持しつつ衝突を回避する
         "super+arrow_right=text:\\x1b[F"
-        # 背景不透明度トグル: 70%（半透明）↔ 100%（完全不透明）
+        # 背景不透明度トグル: 60%（半透明）↔ 100%（完全不透明）
         "cmd+shift+o=toggle_background_opacity"
       ];
     };
