@@ -22,6 +22,25 @@ vim.keymap.set("n", "<leader>bd", function()
   vim.api.nvim_buf_delete(cur, { force = false })
 end, { desc = "Delete buffer (preserve layout)" })
 
+-- スクラッチバッファを現在のウィンドウに開く
+vim.keymap.set("n", "<leader>n", function()
+  vim.cmd("enew")
+  vim.bo.buftype = "nofile"
+  vim.bo.bufhidden = "wipe"
+  vim.bo.swapfile = false
+end, { desc = "New scratch buffer" })
+
+-- スクラッチバッファを現在のウィンドウの下30%に分割して開く
+vim.keymap.set("n", "<leader>N", function()
+  local height = math.floor(vim.api.nvim_win_get_height(0) * 0.3)
+  vim.cmd("belowright split")
+  vim.cmd("resize " .. height)
+  vim.cmd("enew")
+  vim.bo.buftype = "nofile"
+  vim.bo.bufhidden = "wipe"
+  vim.bo.swapfile = false
+end, { desc = "New scratch buffer (bottom split)" })
+
 -- バッファのパスをクリップボードにコピー
 vim.keymap.set("n", "<leader>yn", function() vim.fn.setreg("+", vim.fn.expand("%:t")) end, { desc = "Yank filename" })
 vim.keymap.set("n", "<leader>yp", function() vim.fn.setreg("+", vim.fn.expand("%:.")) end, { desc = "Yank relative path" })
