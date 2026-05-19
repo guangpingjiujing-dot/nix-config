@@ -40,9 +40,10 @@ vim.opt.wrap = false
 -- これにより y でコピーしたものを Cmd+V で他のアプリに貼り付けられる
 vim.opt.clipboard = "unnamedplus"
 
--- Insert モードを抜けたら常に ABC 入力に戻す
+-- Normal モードに戻る・ウィンドウを移動したら常に ABC 入力に切り替える
 -- JIS キーボードでかな入力のまま Normal モードに入るとキーが正しく解釈されないため
-vim.api.nvim_create_autocmd({ "InsertLeave", "TermLeave" }, {
+-- WinEnter を追加することで neo-tree 等から Ctrl+hjkl で移動した際もカバーする
+vim.api.nvim_create_autocmd({ "InsertLeave", "TermLeave", "WinEnter" }, {
   pattern = "*",
   callback = function()
     vim.fn.system("macism com.apple.keylayout.ABC")
