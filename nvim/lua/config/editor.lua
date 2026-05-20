@@ -49,7 +49,8 @@ vim.keymap.set("n", "<leader>yP", function() vim.fn.setreg("+", vim.fn.expand("%
 -- 絶対行番号と相対行番号を両方表示する
 vim.opt.number = true
 vim.opt.relativenumber = true
-vim.opt.statuscolumn = "%=%#LineNr#%{printf('%4d', v:lnum)} │ %#Normal#%{printf('%3d', v:relnum)} "
+vim.api.nvim_set_hl(0, "RelLineNr", { fg = "#7aa2f7" })
+vim.opt.statuscolumn = "%=%#LineNr#%{printf('%4d', v:lnum)} │ %#RelLineNr#%{printf('%3d', v:relnum)} "
 
 -- サインカラムを常に表示（gitsigns 等のサインが消えないようにする）
 vim.opt.signcolumn = "yes:2"
