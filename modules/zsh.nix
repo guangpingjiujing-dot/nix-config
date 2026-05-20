@@ -29,12 +29,6 @@
 
     initContent = ''
       eval "$(pyenv init -)"
-
-      # Ghosttyの新しいタブ/ウィンドウを開いたとき、opacity を自動で100%に切り替える
-      # background-opacity = 0.6 だが、起動時に cmd+shift+o をシミュレートして100%で開始する
-      if [[ -n "$GHOSTTY_RESOURCES_DIR" ]]; then
-        (sleep 0.2 && osascript -e 'tell application "System Events" to tell process "Ghostty" to keystroke "o" using {command down, shift down}' &>/dev/null) &!
-      fi
     '';
 
     # コマンド履歴の設定
