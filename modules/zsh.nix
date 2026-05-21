@@ -10,6 +10,9 @@
     # zsh が自動で vi モードに切り替わり Ctrl+F などが使えなくなる
     defaultKeymap = "emacs";
 
+    # ディレクトリ名だけで cd できるようにする（例: ~/project → cd ~/project が不要）
+    autocd = true;
+
     # コマンド入力中にシンタックスハイライトを表示する
     # 例: 存在するコマンドは緑、存在しないコマンドは赤
     syntaxHighlighting.enable = true;
