@@ -7,9 +7,18 @@ telescope.setup({
     layout_config = {
       width = 0.95,
       height = 0.95,
-      preview_width = 0.6,
+      preview_width = 0.5,
     },
-    path_display = { "truncate" },
+    path_display = function(_, path)
+      local tail = require("telescope.utils").path_tail(path)
+      if #path == #tail then
+        return tail
+      end
+      local dir = path:sub(1, #path - #tail - 1)
+      local display = tail .. "  " .. dir
+      -- dim the directory part (0-indexed, exclusive end)
+      return display, { { { #tail + 2, #display }, "TelescopeResultsComment" } }
+    end,
   },
   extensions = {
     fzf = {},
