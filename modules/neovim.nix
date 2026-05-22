@@ -35,6 +35,8 @@
 
       nvim-scrollbar     # スクロールバー
 
+      auto-save-nvim     # 自動保存
+
       (pkgs.vimUtils.buildVimPlugin {
         name = "accelerated-jk-nvim";
         src = pkgs.fetchFromGitHub {
