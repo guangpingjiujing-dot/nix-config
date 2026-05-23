@@ -1,9 +1,26 @@
 local telescope = require("telescope")
 local builtin = require("telescope.builtin")
 local previewers = require("telescope.previewers")
+local actions = require("telescope.actions")
+local action_state = require("telescope.actions.state")
+
+local send_to_claude = function(prompt_bufnr)
+  local entry = action_state.get_selected_entry()
+  actions.close(prompt_bufnr)
+  if entry then
+    local filepath = entry.path or entry.filename or entry.value
+    if filepath then
+      vim.cmd("ClaudeCodeAdd " .. vim.fn.fnameescape(filepath))
+      vim.schedule(function() vim.cmd("ClaudeCodeFocus") end)
+    end
+  end
+end
 
 telescope.setup({
   defaults = {
+    mappings = {
+      n = { ["<leader>as"] = send_to_claude },
+    },
     layout_config = {
       width = 0.95,
       height = 0.95,
