@@ -32,6 +32,10 @@
       # 利用可能なテーマ一覧: ghostty +list-themes
       theme = "TokyoNight Night";
 
+      # 不透明度とぼかし
+      background-opacity = 100;
+      background-blur-radius = 0;
+
       # macOSタイトルバーのスタイル
       # native    : macOS標準のタイトルバー（デフォルト）
       # hidden    : タイトルバーを非表示
@@ -55,7 +59,7 @@
         "ctrl+cmd+right=resize_split:right,30"
         "ctrl+cmd+up=resize_split:up,30"
         "ctrl+cmd+down=resize_split:down,30"
-        "global:ctrl+`=toggle_quick_terminal"
+        "global:ctrl+enter=toggle_visibility"
         "cmd+i=prompt_tab_title"
         # デフォルトの super+arrow_right=text:\x05 (ctrl+e) を上書きする
         # \x05 はNeovimのターミナルモードでリサイズモードに入るキーバインドと衝突するため、
