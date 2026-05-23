@@ -143,13 +143,16 @@ nix run .#home-manager -- switch --flake .
       "Bash(bq ls *)",
       "Bash(bq show *)",
       "Bash(bq mk *)",
+      "Bash(dbt --version)",
       "Bash(dbt compile *)",
       "Bash(dbt parse *)",
       "Bash(dbt ls *)",
       "Bash(dbt list *)",
       "Bash(dbt debug *)",
       "Bash(dbt deps *)",
-      "Bash(dbt docs *)"
+      "Bash(dbt docs *)",
+      "Bash(dbt seed *)",
+      "Bash(dbt test *)"
     ]
   }
 }
