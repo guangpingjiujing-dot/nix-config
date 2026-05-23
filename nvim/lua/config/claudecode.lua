@@ -140,6 +140,12 @@ vim.api.nvim_create_autocmd("TermOpen", {
     if name:lower():match("claude") then
       vim.keymap.set("t", "<C-c>", "<C-\\><C-n>", { buffer = ev.buf })
       vim.keymap.set("t", "<C-[>", "<C-\\><C-n>", { buffer = ev.buf })
+      -- <C-k> はグローバルではウィンドウ移動にマップされているが、
+      -- zsh の kill-to-end-of-line として機能させるため直接送信する
+      vim.keymap.set("t", "<C-k>", function()
+        local chan = vim.b[ev.buf].terminal_job_id
+        if chan then vim.fn.chansend(chan, "\11") end
+      end, { buffer = ev.buf })
     end
   end,
 })
