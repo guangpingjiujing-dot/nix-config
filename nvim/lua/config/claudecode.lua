@@ -132,6 +132,18 @@ end, { desc = "Send to Claude" })
 vim.keymap.set("n", "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>",  { desc = "Accept diff" })
 vim.keymap.set("n", "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>",    { desc = "Deny diff" })
 
+-- Claude Code ターミナルで <C-c> / <C-[> → ノーマルモードへ
+-- <Esc> は意図的にマップしない（Claude 動作中の中断キーとして機能させるため）
+vim.api.nvim_create_autocmd("TermOpen", {
+  callback = function(ev)
+    local name = vim.api.nvim_buf_get_name(ev.buf)
+    if name:lower():match("claude") then
+      vim.keymap.set("t", "<C-c>", "<C-\\><C-n>", { buffer = ev.buf })
+      vim.keymap.set("t", "<C-[>", "<C-\\><C-n>", { buffer = ev.buf })
+    end
+  end,
+})
+
 -- ファイルツリー上での <leader>as でファイルを Claude に追加
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "NvimTree", "neo-tree", "oil", "minifiles", "netrw" },
