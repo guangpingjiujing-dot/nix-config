@@ -1,13 +1,29 @@
 -- ウィンドウ間の移動（LazyVim 標準の <C-hjkl>）
+-- 端まで来たら反対側にラップアラウンドする
 -- ターミナルモードでも同じキーで移動できるようにする（Claude Code 動作中でもペイン移動可能）
-vim.keymap.set("n", "<C-h>", "<C-w>h")
-vim.keymap.set("n", "<C-j>", "<C-w>j")
-vim.keymap.set("n", "<C-k>", "<C-w>k")
-vim.keymap.set("n", "<C-l>", "<C-w>l")
-vim.keymap.set("t", "<C-h>", "<C-\\><C-n><C-w>h")
-vim.keymap.set("t", "<C-j>", "<C-\\><C-n><C-w>j")
-vim.keymap.set("t", "<C-k>", "<C-\\><C-n><C-w>k")
-vim.keymap.set("t", "<C-l>", "<C-\\><C-n><C-w>l")
+local function smart_move(dir, wrap_dir)
+  local win_before = vim.api.nvim_get_current_win()
+  vim.cmd("wincmd " .. dir)
+  if vim.api.nvim_get_current_win() == win_before then
+    vim.cmd("999wincmd " .. wrap_dir)
+  end
+end
+
+vim.keymap.set("n", "<C-h>", function() smart_move("h", "l") end)
+vim.keymap.set("n", "<C-j>", function() smart_move("j", "k") end)
+vim.keymap.set("n", "<C-k>", function() smart_move("k", "j") end)
+vim.keymap.set("n", "<C-l>", function() smart_move("l", "h") end)
+
+local esc_t = vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true)
+local function term_smart_move(dir, wrap_dir)
+  vim.api.nvim_feedkeys(esc_t, "n", false)
+  vim.schedule(function() smart_move(dir, wrap_dir) end)
+end
+
+vim.keymap.set("t", "<C-h>", function() term_smart_move("h", "l") end)
+vim.keymap.set("t", "<C-j>", function() term_smart_move("j", "k") end)
+vim.keymap.set("t", "<C-k>", function() term_smart_move("k", "j") end)
+vim.keymap.set("t", "<C-l>", function() term_smart_move("l", "h") end)
 
 -- 現在のバッファを閉じて次のバッファをそのウィンドウに表示する
 -- neo-tree が全画面になるのを防ぐため、先に別バッファへ切り替えてから削除する
