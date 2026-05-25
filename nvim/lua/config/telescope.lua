@@ -19,6 +19,7 @@ end
 telescope.setup({
   defaults = {
     mappings = {
+      i = { ["<C-c>"] = function() vim.cmd("stopinsert") end },
       n = { ["<leader>as"] = send_to_claude },
     },
     layout_config = {
