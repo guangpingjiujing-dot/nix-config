@@ -34,7 +34,7 @@ vim.api.nvim_create_user_command("LspRestart", function()
 end, {})
 
 -- 診断メッセージのキーマップ（LSP 接続前から有効なためグローバルに設定）
-vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float)  -- カーソル行のエラー詳細
+vim.keymap.set("n", "<leader>cd", vim.diagnostic.open_float)  -- カーソル行のエラー詳細（LazyVim 標準）
 vim.keymap.set("n", "]d",        vim.diagnostic.goto_next)   -- 次のエラーへ
 vim.keymap.set("n", "[d",        vim.diagnostic.goto_prev)   -- 前のエラーへ
 
