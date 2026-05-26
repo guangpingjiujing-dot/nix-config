@@ -39,6 +39,7 @@
     nodejs             # Node.js（npm を含む）
     supabase-cli       # Supabase CLI（supabase コマンド）
     nb                 # CLIノート・ブックマーク管理ツール
+    pyright            # Python LSP サーバー（pyright-langserver バイナリを含む）
     nerd-fonts.jetbrains-mono  # JetBrainsMono Nerd Font（Ghostty・Neovim のアイコン表示に必要）
 
     # Python インタープリタ（複数バージョンをグローバルで利用可能にする）

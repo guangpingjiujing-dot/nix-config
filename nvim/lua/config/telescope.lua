@@ -25,7 +25,9 @@ telescope.setup({
     layout_config = {
       width = 0.95,
       height = 0.95,
-      preview_width = 0.5,
+      horizontal = {
+        preview_width = 0.5,
+      },
     },
     path_display = function(_, path)
       local tail = require("telescope.utils").path_tail(path)

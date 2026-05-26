@@ -14,6 +14,8 @@
     # Nix が管理するのは「どのプラグインを入れるか」だけ
     # 「プラグインをどう設定するか」は nvim/ 配下の Lua ファイルで管理する
     plugins = with pkgs.vimPlugins; [
+      venv-selector-nvim  # Python 仮想環境をインタラクティブに選択
+
       tokyonight-nvim
 
       neo-tree-nvim
