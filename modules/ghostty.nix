@@ -51,6 +51,7 @@
         "ctrl+cmd+right=resize_split:right,30"
         "ctrl+cmd+up=resize_split:up,30"
         "ctrl+cmd+down=resize_split:down,30"
+        "global:ctrl+shift+`=toggle_quick_terminal"
         "global:ctrl+enter=toggle_visibility"
         "cmd+i=prompt_tab_title"
         # デフォルトの super+arrow_right=text:\x05 (ctrl+e) を上書きする
