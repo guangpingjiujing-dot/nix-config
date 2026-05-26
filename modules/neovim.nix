@@ -14,6 +14,13 @@
     # Nix が管理するのは「どのプラグインを入れるか」だけ
     # 「プラグインをどう設定するか」は nvim/ 配下の Lua ファイルで管理する
     plugins = with pkgs.vimPlugins; [
+      nvim-cmp           # 補完エンジン
+      cmp-nvim-lsp       # LSP を補完ソースとして使う
+      cmp-buffer         # バッファ内の単語を補完ソースとして使う
+      cmp-path           # ファイルパスを補完ソースとして使う
+      luasnip            # スニペットエンジン（nvim-cmp の必須依存）
+      cmp_luasnip        # luasnip を補完ソースとして使う
+
       venv-selector-nvim  # Python 仮想環境をインタラクティブに選択
 
       tokyonight-nvim
