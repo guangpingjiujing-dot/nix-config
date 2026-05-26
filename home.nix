@@ -39,6 +39,7 @@
     nodejs             # Node.js（npm を含む）
     supabase-cli       # Supabase CLI（supabase コマンド）
     nb                 # CLIノート・ブックマーク管理ツール
+    nerd-fonts.jetbrains-mono  # JetBrainsMono Nerd Font（Ghostty・Neovim のアイコン表示に必要）
 
     # Python インタープリタ（複数バージョンをグローバルで利用可能にする）
     # python312 をデフォルトの python3 とし、他バージョンはバージョン付きバイナリのみ公開する。

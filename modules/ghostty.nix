@@ -1,14 +1,6 @@
 { pkgs, ... }:
 
 {
-  # Nerd Fontをmacのフォントディレクトリに配置する
-  # Nerd Fontとは: 通常のフォントにアイコン（グリフ）を追加した開発者向けフォント
-  # Neovimでファイルツリーやステータスバーにアイコンを表示するために必要
-  home.file."Library/Fonts/JetBrainsMonoNerdFont" = {
-    source = "${pkgs.nerd-fonts.jetbrains-mono}/share/fonts/truetype/JetBrainsMonoNerdFont";
-    recursive = true;
-  };
-
   # ~/Applications/ にシンボリックリンクを置く
   # Spotlightは ~/.nix-profile/Applications/ をインデックスしないため、
   # ~/Applications/ 経由にすることでSpotlight・Launchpadから起動できるようにする
