@@ -117,6 +117,16 @@ vim.api.nvim_create_autocmd("InsertEnter", {
   end,
 })
 
+local function is_claude_visible()
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    if vim.api.nvim_buf_get_name(buf):lower():match("claude") then
+      return true
+    end
+  end
+  return false
+end
+
 -- README 推奨のキーバインド
 -- <leader> = Space（init.lua で設定済み）
 vim.keymap.set("n", "<leader>ac", "<cmd>ClaudeCode<cr>",            { desc = "Toggle Claude" })
@@ -124,8 +134,25 @@ vim.keymap.set("n", "<leader>af", "<cmd>ClaudeCodeFocus<cr>",       { desc = "Fo
 vim.keymap.set("n", "<leader>ar", "<cmd>ClaudeCode --resume<cr>",   { desc = "Resume Claude" })
 vim.keymap.set("n", "<leader>aC", "<cmd>ClaudeCode --continue<cr>", { desc = "Continue Claude" })
 vim.keymap.set("n", "<leader>am", "<cmd>ClaudeCodeSelectModel<cr>", { desc = "Select Claude model" })
-vim.keymap.set("n", "<leader>ab", "<cmd>ClaudeCodeAdd %<cr>",       { desc = "Add current buffer" })
+vim.keymap.set("n", "<leader>ab", function()
+  local visible = is_claude_visible()
+  vim.cmd("ClaudeCodeAdd %")
+  if visible then
+    vim.schedule(function() vim.cmd("ClaudeCodeFocus") end)
+  end
+end, { desc = "Add current buffer" })
+vim.keymap.set("n", "<leader>as", function()
+  local visible = is_claude_visible()
+  vim.cmd("ClaudeCodeAdd %")
+  if visible then
+    vim.schedule(function() vim.cmd("ClaudeCodeFocus") end)
+  end
+end, { desc = "Send to Claude (add buffer)" })
 vim.keymap.set("v", "<leader>as", function()
+  if not is_claude_visible() then
+    vim.notify("Claude is not open", vim.log.levels.WARN)
+    return
+  end
   vim.cmd("ClaudeCodeSend")
   vim.schedule(function() vim.cmd("ClaudeCodeFocus") end)
 end, { desc = "Send to Claude" })
@@ -155,8 +182,11 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = { "NvimTree", "neo-tree", "oil", "minifiles", "netrw" },
   callback = function(ev)
     vim.keymap.set("n", "<leader>as", function()
+      local visible = is_claude_visible()
       vim.cmd("ClaudeCodeTreeAdd")
-      vim.schedule(function() vim.cmd("ClaudeCodeFocus") end)
+      if visible then
+        vim.schedule(function() vim.cmd("ClaudeCodeFocus") end)
+      end
     end, { desc = "Add file", buffer = ev.buf })
   end,
 })

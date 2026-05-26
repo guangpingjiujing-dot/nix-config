@@ -11,7 +11,14 @@ local send_to_claude = function(prompt_bufnr)
     local filepath = entry.path or entry.filename or entry.value
     if filepath then
       vim.cmd("ClaudeCodeAdd " .. vim.fn.fnameescape(filepath))
-      vim.schedule(function() vim.cmd("ClaudeCodeFocus") end)
+      vim.schedule(function()
+        -- ClaudeCodeAdd が ensure_visible() でターミナルを開いてフォーカスを
+        -- 移している場合は ClaudeCodeFocus を呼ばない（toggle で閉じてしまうため）
+        local cur_buf = vim.api.nvim_win_get_buf(vim.api.nvim_get_current_win())
+        if not vim.api.nvim_buf_get_name(cur_buf):lower():match("claude") then
+          vim.cmd("ClaudeCodeFocus")
+        end
+      end)
     end
   end
 end
