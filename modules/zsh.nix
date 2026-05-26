@@ -88,6 +88,9 @@
 
       # pyproject.toml / package.json などのバージョン表示を非表示にする
       package.disabled = true;
+
+      aws.disabled = true;
+      gcloud.disabled = true;
     };
   };
 }
