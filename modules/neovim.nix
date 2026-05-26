@@ -46,6 +46,8 @@
 
       auto-save-nvim     # 自動保存
 
+      render-markdown-nvim  # Markdownをバッファ内でレンダリング
+
       (pkgs.vimUtils.buildVimPlugin {
         name = "accelerated-jk-nvim";
         src = pkgs.fetchFromGitHub {
