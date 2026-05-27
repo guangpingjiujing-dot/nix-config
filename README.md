@@ -120,6 +120,7 @@ nix run .#home-manager -- switch --flake .
       "Bash(which *)",
       "Bash(mkdir *)",
       "Bash(touch *)",
+      "Bash(source *)",
       "Bash(nix eval *)",
       "Bash(nix search *)",
       "Bash(ghostty *)",

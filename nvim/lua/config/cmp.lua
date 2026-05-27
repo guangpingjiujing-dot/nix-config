@@ -12,7 +12,9 @@ cmp.setup({
     ["<C-p>"]     = cmp.mapping.select_prev_item(),         -- 前の候補
     ["<C-y>"]     = cmp.mapping.confirm({ select = true }), -- 確定
     ["<C-Space>"] = cmp.mapping.complete(),                 -- 手動トリガー
-    ["<C-e>"]     = cmp.mapping.abort(),                    -- 閉じる
+    ["<C-e>"]     = cmp.mapping(function(fallback)
+      if cmp.visible() then cmp.abort() else fallback() end
+    end),                                                   -- 閉じる / 行末へ
   }),
   sources = cmp.config.sources(
     {
