@@ -1,0 +1,7 @@
+{
+  "name": "vercel-nix",
+  "version": "1.0.0",
+  "dependencies": {
+    "vercel": "54.5.0"
+  }
+}

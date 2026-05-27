@@ -9,6 +9,7 @@
     ./modules/ghostty.nix
     ./modules/git.nix
     ./modules/neovim.nix
+    ./modules/vercel.nix
     ./modules/zsh.nix
   ];
 
