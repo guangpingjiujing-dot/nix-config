@@ -82,6 +82,9 @@ vim.opt.clipboard = "unnamedplus"
 vim.keymap.set("i", "<C-c>", "<Esc>")
 vim.keymap.set("i", "<C-[>", "<Esc>")
 
+-- ノーマルモードで Esc を押したら検索ハイライトを解除する（LazyVim 標準）
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlights" })
+
 -- Normal モードに戻る・ウィンドウを移動したら常に ABC 入力に切り替える
 -- JIS キーボードでかな入力のまま Normal モードに入るとキーが正しく解釈されないため
 -- WinEnter を追加することで neo-tree 等から Ctrl+hjkl で移動した際もカバーする
