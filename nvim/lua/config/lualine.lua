@@ -20,7 +20,13 @@ local function my_tabline()
 
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
     if not vim.api.nvim_buf_is_loaded(buf) then goto continue end
-    if vim.fn.buflisted(buf) ~= 1 then goto continue end
+    -- 通常ファイル (buftype="") と Slack バッファ (buftype="acwrite") のみ対象
+    local ok_bt, bt = pcall(function() return vim.bo[buf].buftype end)
+    if not ok_bt then goto continue end
+    if bt ~= "" and bt ~= "acwrite" then goto continue end
+    -- 無名バッファはスキップ
+    local name = vim.api.nvim_buf_get_name(buf)
+    if name == "" then goto continue end
     if is_excluded(buf) then goto continue end
     table.insert(bufs, buf)
     ::continue::
