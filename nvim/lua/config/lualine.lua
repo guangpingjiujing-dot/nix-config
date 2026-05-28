@@ -10,6 +10,9 @@ require("lualine").setup({
         color = { fg = "#c0caf5", gui = "bold" },
       },
     },
+    lualine_x = {},
+    lualine_y = {},
+    lualine_z = {},
   },
   inactive_sections = {
     lualine_c = {
