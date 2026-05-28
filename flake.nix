@@ -35,7 +35,7 @@
         inherit pkgs;
 
         # マシン固有の値を各モジュールへ渡す
-        extraSpecialArgs = { inherit (local) username homeDirectory gitName gitEmail; };
+        extraSpecialArgs = { inherit (local) username homeDirectory gitName gitEmail slackToken; };
 
         # 読み込む設定ファイル
         # home.nixがルートで、そこから各モジュールをimportする

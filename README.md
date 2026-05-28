@@ -29,6 +29,7 @@ cd ~/.config/nix-config
   system = "aarch64-darwin";      # Intel Mac の場合は "x86_64-darwin"
   gitName = "Your Name";
   gitEmail = "your@email.com";
+  slackToken = "xoxp-...";        # Slack API トークン（下記参照）
 }
 ```
 
@@ -41,7 +42,7 @@ git update-index --skip-worktree local.nix
 ### 4. home-managerで環境を適用
 
 ```bash
-nix run .#home-manager -- switch --flake .
+home-manager switch --flake path:$(pwd)
 ```
 
 ### 5. 手動インストールが必要なもの
@@ -169,6 +170,53 @@ nix run .#home-manager -- switch --flake .
 
 スクリプト本体（`~/.config/claude/statusline.sh`）は `home-manager switch` で自動的に配置される。
 
+## Slack トークンの取得
+
+`slack-term`（ターミナル上で動作するSlack TUIクライアント）を使うには、Slack API トークンが必要。
+
+### 1. Slack App を作成する
+
+1. [api.slack.com/apps](https://api.slack.com/apps) にアクセスし「Create New App」→「From scratch」
+2. App Name（任意）とワークスペースを設定して作成
+
+### 2. OAuth スコープを追加する
+
+左メニュー「OAuth & Permissions」→「User Token Scopes」に以下を追加：
+
+| スコープ | 用途 |
+|---|---|
+| `channels:history` | パブリックチャンネルのメッセージ読み取り |
+| `channels:read` | チャンネル一覧の取得 |
+| `im:history` | DM の読み取り |
+| `im:read` | DM チャンネル一覧 |
+| `groups:history` | プライベートチャンネルのメッセージ読み取り |
+| `groups:read` | プライベートチャンネル一覧 |
+| `users:read` | ユーザー名の表示 |
+| `chat:write` | メッセージの送信 |
+
+### 3. トークンを発行する
+
+「Install to Workspace」→ ワークスペースへのインストールを許可すると、
+「User OAuth Token」（`xoxp-` で始まる文字列）が発行される。
+
+### 4. local.nix に設定する
+
+```nix
+slackToken = "xoxp-xxxxxxxxxx-...";
+```
+
+設定後 `home-manager switch` を実行すると `~/.config/slack-term/config` に自動で書き込まれる。
+
+### slack-term の基本操作
+
+| キー | 操作 |
+|---|---|
+| `↑` / `↓` または `k` / `j` | チャンネル切り替え |
+| `i` | メッセージ入力モード |
+| `Enter` | 送信 |
+| `Esc` | 入力モード終了 |
+| `q` | 終了 |
+
 ## 構成
 
 ```
@@ -204,7 +252,7 @@ nix-config/
 設定を変更したあとは以下を実行：
 
 ```bash
-nix run .#home-manager -- switch --flake .
+home-manager switch --flake path:$(pwd)
 ```
 
 > **Note:** 新しいファイルを追加した場合は `git add` してから実行する（Nix flakeはgitで追跡されていないファイルを無視するため）。

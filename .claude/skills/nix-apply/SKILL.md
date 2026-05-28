@@ -16,12 +16,22 @@ nix-config への変更を実環境に反映するスキル。
 git add <新しいファイル>
 
 # 適用（nix-configリポジトリのルートパスを使う）
-home-manager switch --flake <nix-configのリポジトリルート>
+# path: プレフィックスを必ず付ける（理由は下記参照）
+home-manager switch --flake path:<nix-configのリポジトリルート>
 ```
 
 リポジトリのルートパスは `git rev-parse --show-toplevel` で取得すること。パスをハードコードしてはいけない。
 
 既存ファイルの編集のみの場合は `git add` 不要。
+
+## `path:` プレフィックスが必須な理由
+
+`--flake .` や `--flake /path/to/repo` は Nix が **git 経由**でソースツリーを読み込む。
+このリポジトリでは `local.nix` が `git update-index --skip-worktree` で管理されているため、
+git はディスク上の変更を無視してコミット済みのプレースホルダー値を返す。
+
+`--flake path:/path/to/repo` にすると **git をバイパス**してディスク上の実ファイルを直接読むため、
+`local.nix` の実際の値（トークン等）が正しく反映される。
 
 ## 重要な仕組み
 
