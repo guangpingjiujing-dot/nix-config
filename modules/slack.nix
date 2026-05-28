@@ -11,6 +11,37 @@
   };
 
   programs.zsh.initContent = ''
+    _SLACK_USERS_CACHE="/tmp/slack-users.json"
+
+    # ユーザーキャッシュを確認・更新（1時間以内は再利用）
+    # API エラー時（not_authed 等）は {} を書き込んでキャッシュを壊さない
+    _slack_ensure_users() {
+      if [[ ! -f "$_SLACK_USERS_CACHE" ]] || [[ -n "$(find "$_SLACK_USERS_CACHE" -mmin +60 2>/dev/null)" ]]; then
+        local result
+        result=$(curl -s "https://slack.com/api/users.list?limit=1000" \
+          -H "Authorization: Bearer $SLACK_CLI_TOKEN" \
+          | jq 'if .ok then [.members[] | {(.id): ((.profile.display_name_normalized | select(. != "")) // .profile.real_name // .name)}] | add // {} else {} end' 2>/dev/null)
+        echo "''${result:-{\}}" > "$_SLACK_USERS_CACHE"
+      fi
+    }
+
+    # ユーザーキャッシュを強制更新
+    slack-users-refresh() {
+      rm -f "$_SLACK_USERS_CACHE"
+      _slack_ensure_users && echo "ユーザーキャッシュを更新しました"
+    }
+
+    # キャッシュからユーザーJSONを読み込む（空・不正JSON は {} にフォールバック）
+    _slack_load_users() {
+      local content
+      content=$(cat "$_SLACK_USERS_CACHE" 2>/dev/null)
+      if [[ -n "$content" ]] && echo "$content" | jq empty 2>/dev/null; then
+        echo "$content"
+      else
+        echo '{}'
+      fi
+    }
+
     # fzf でチャンネルを選択してIDを返す（ページネーションで全チャンネル取得）
     _slack_pick_channel() {
       local cursor="" all_channels="" url response page
@@ -38,10 +69,16 @@
       fi
       [[ -z "$channel" ]] && return 1
       [[ -z "$limit" ]] && limit=30
+      _slack_ensure_users
+      local users_json
+      users_json=$(_slack_load_users)
       curl -s "https://slack.com/api/conversations.history?channel=$channel&limit=$limit" \
         -H "Authorization: Bearer $SLACK_CLI_TOKEN" \
-        | jq -r '[.messages[]] | reverse[] |
-            "\u001b[36m\(.ts | split(".")[0] | tonumber | strftime("%m/%d %H:%M"))\u001b[0m  \u001b[33m\(.user // .bot_id // "system")\u001b[0m  \(if .text != "" then .text else (.attachments[0].pretext // .attachments[0].text // "(no text)") end)\(if (.reply_count // 0) > 0 then "  \u001b[35m[スレッド\(.reply_count)件]\u001b[0m" else "" end)"'
+        | jq -r --argjson users "$users_json" '[.messages[]] | reverse[] |
+            ($users[.user] // .bot_profile.name) as $display_name |
+            (.user // .bot_id // "system") as $uid |
+            (if $display_name != null then "\($display_name) (\($uid))" else $uid end) as $name |
+            "\u001b[36m\(.ts | split(".")[0] | tonumber | strftime("%m/%d %H:%M"))\u001b[0m  \u001b[33m\($name)\u001b[0m  \(if .text != "" then .text else (.attachments[0].pretext // .attachments[0].text // "(no text)") end)\(if (.reply_count // 0) > 0 then "  \u001b[35m[スレッド\(.reply_count)件]\u001b[0m" else "" end)"'
     }
 
     # メッセージをfzfで選択してスレッド返信を色付きで表示（引数: [channel_id]）
@@ -52,22 +89,32 @@
         channel=$(_slack_pick_channel)
       fi
       [[ -z "$channel" ]] && return 1
+      _slack_ensure_users
+      local users_json
+      users_json=$(_slack_load_users)
       local selected
       selected=$(curl -s "https://slack.com/api/conversations.history?channel=$channel&limit=50" \
         -H "Authorization: Bearer $SLACK_CLI_TOKEN" \
-        | jq -r '[.messages[]] | reverse[] |
-            .ts + "|" + "\(.ts | split(".")[0] | tonumber | strftime("%m/%d %H:%M"))  \(.user // .bot_id // "system")  \(if .text != "" then .text else (.attachments[0].pretext // .attachments[0].text // "(no text)") end)\(if (.reply_count // 0) > 0 then " [スレッド\(.reply_count)件]" else "" end)"' \
+        | jq -r --argjson users "$users_json" '[.messages[]] | reverse[] |
+            ($users[.user] // .bot_profile.name) as $display_name |
+            (.user // .bot_id // "system") as $uid |
+            (if $display_name != null then "\($display_name) (\($uid))" else $uid end) as $name |
+            .ts + "|" + "\(.ts | split(".")[0] | tonumber | strftime("%m/%d %H:%M"))  \($name)  \(if .text != "" then .text else (.attachments[0].pretext // .attachments[0].text // "(no text)") end)\(if (.reply_count // 0) > 0 then " [スレッド\(.reply_count)件]" else "" end)"' \
         | fzf --with-nth=2 --delimiter='|' --prompt='Message> ')
       [[ -z "$selected" ]] && return 1
       local ts
       ts=$(echo "$selected" | cut -d'|' -f1)
       curl -s "https://slack.com/api/conversations.replies?channel=$channel&ts=$ts" \
         -H "Authorization: Bearer $SLACK_CLI_TOKEN" \
-        | jq -r '[.messages[]] | to_entries[] |
+        | jq -r --argjson users "$users_json" '[.messages[]] | to_entries[] |
+            .value as $msg |
+            ($users[$msg.user] // $msg.bot_profile.name) as $display_name |
+            ($msg.user // $msg.bot_id // "system") as $uid |
+            (if $display_name != null then "\($display_name) (\($uid))" else $uid end) as $name |
             if .key == 0 then
-              "\u001b[32m\(.value.ts | split(".")[0] | tonumber | strftime("%m/%d %H:%M"))\u001b[0m  \u001b[32m\(.value.user // .value.bot_id // "system")\u001b[0m  \u001b[32m[スレッド元]\u001b[0m \(if .value.text != "" then .value.text else (.value.attachments[0].pretext // .value.attachments[0].text // "(no text)") end)"
+              "\u001b[32m\($msg.ts | split(".")[0] | tonumber | strftime("%m/%d %H:%M"))\u001b[0m  \u001b[32m\($name)\u001b[0m  \u001b[32m[スレッド元]\u001b[0m \(if $msg.text != "" then $msg.text else ($msg.attachments[0].pretext // $msg.attachments[0].text // "(no text)") end)"
             else
-              "  \u001b[36m\(.value.ts | split(".")[0] | tonumber | strftime("%m/%d %H:%M"))\u001b[0m  \u001b[33m\(.value.user // .value.bot_id // "system")\u001b[0m  \(if .value.text != "" then .value.text else (.value.attachments[0].pretext // .value.attachments[0].text // "(no text)") end)"
+              "  \u001b[36m\($msg.ts | split(".")[0] | tonumber | strftime("%m/%d %H:%M"))\u001b[0m  \u001b[33m\($name)\u001b[0m  \(if $msg.text != "" then $msg.text else ($msg.attachments[0].pretext // $msg.attachments[0].text // "(no text)") end)"
             end'
     }
 
@@ -79,11 +126,17 @@
         channel=$(_slack_pick_channel)
       fi
       [[ -z "$channel" ]] && return 1
+      _slack_ensure_users
+      local users_json
+      users_json=$(_slack_load_users)
       local selected
       selected=$(curl -s "https://slack.com/api/conversations.history?channel=$channel&limit=50" \
         -H "Authorization: Bearer $SLACK_CLI_TOKEN" \
-        | jq -r '[.messages[]] | reverse[] |
-            .ts + "|" + "\(.ts | split(".")[0] | tonumber | strftime("%m/%d %H:%M"))  \(.user // .bot_id // "system")  \(if .text != "" then .text else (.attachments[0].pretext // .attachments[0].text // "(no text)") end)\(if (.reply_count // 0) > 0 then " [スレッド\(.reply_count)件]" else "" end)"' \
+        | jq -r --argjson users "$users_json" '[.messages[]] | reverse[] |
+            ($users[.user] // .bot_profile.name) as $display_name |
+            (.user // .bot_id // "system") as $uid |
+            (if $display_name != null then "\($display_name) (\($uid))" else $uid end) as $name |
+            .ts + "|" + "\(.ts | split(".")[0] | tonumber | strftime("%m/%d %H:%M"))  \($name)  \(if .text != "" then .text else (.attachments[0].pretext // .attachments[0].text // "(no text)") end)\(if (.reply_count // 0) > 0 then " [スレッド\(.reply_count)件]" else "" end)"' \
         | fzf --with-nth=2 --delimiter='|' --prompt='Reply to> ')
       [[ -z "$selected" ]] && return 1
       local ts
@@ -93,11 +146,15 @@
       tmpfile=$(mktemp /tmp/slack-reply-XXXXXX)
       curl -s "https://slack.com/api/conversations.replies?channel=$channel&ts=$ts" \
         -H "Authorization: Bearer $SLACK_CLI_TOKEN" \
-        | jq -r '[.messages[]] | to_entries[] |
+        | jq -r --argjson users "$users_json" '[.messages[]] | to_entries[] |
+            .value as $msg |
+            ($users[$msg.user] // $msg.bot_profile.name) as $display_name |
+            ($msg.user // $msg.bot_id // "system") as $uid |
+            (if $display_name != null then "\($display_name) (\($uid))" else $uid end) as $name |
             if .key == 0 then
-              "\(.value.ts | split(".")[0] | tonumber | strftime("%m/%d %H:%M"))  [スレッド元] \(.value.user // .value.bot_id // "system")\n\(if .value.text != "" then .value.text else (.value.attachments[0].pretext // .value.attachments[0].text // "(no text)") end)\n"
+              "\($msg.ts | split(".")[0] | tonumber | strftime("%m/%d %H:%M"))  [スレッド元] \($name)\n\(if $msg.text != "" then $msg.text else ($msg.attachments[0].pretext // $msg.attachments[0].text // "(no text)") end)\n"
             else
-              "\(.value.ts | split(".")[0] | tonumber | strftime("%m/%d %H:%M"))  \(.value.user // .value.bot_id // "system")\n\(if .value.text != "" then .value.text else (.value.attachments[0].pretext // .value.attachments[0].text // "(no text)") end)\n"
+              "\($msg.ts | split(".")[0] | tonumber | strftime("%m/%d %H:%M"))  \($name)\n\(if $msg.text != "" then $msg.text else ($msg.attachments[0].pretext // $msg.attachments[0].text // "(no text)") end)\n"
             end' > "$threadfile"
       nvim "$tmpfile" \
         -c "leftabove vsplit $threadfile" \
