@@ -23,6 +23,23 @@ require("neo-tree").setup({
         vim.opt_local.number = true
       end,
     },
+    {
+      event = "file_opened",
+      handler = function()
+        -- follow_current_file がカーソルを移動した後に中央揃えする
+        vim.schedule(function()
+          for _, win in ipairs(vim.api.nvim_list_wins()) do
+            local buf = vim.api.nvim_win_get_buf(win)
+            if vim.bo[buf].filetype == "neo-tree" then
+              vim.api.nvim_win_call(win, function()
+                vim.cmd("normal! zz")
+              end)
+              break
+            end
+          end
+        end)
+      end,
+    },
   },
   filesystem = {
     use_libuv_file_watcher = true,
