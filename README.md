@@ -209,7 +209,7 @@ slackToken = "xoxp-xxxxxxxxxx-...";
 
 設定後 `home-manager switch --flake path:$(pwd)` を実行するとトークンが環境変数 `SLACK_CLI_TOKEN` に設定される。
 
-### 使い方
+### ターミナルでの使い方
 
 | コマンド | 操作 |
 |---|---|
@@ -218,6 +218,38 @@ slackToken = "xoxp-xxxxxxxxxx-...";
 | `slack-thread` | fzf でチャンネル→メッセージを選択してスレッド返信を表示 |
 | `slack-send` | fzf でチャンネルを選択してメッセージを送信 |
 | `slack-send "text"` | テキストを引数で直接渡して送信 |
+
+### Neovim での使い方
+
+Telescope を使ったインタラクティブなスレッド閲覧・返信 UI。
+
+| キー | 操作 |
+|---|---|
+| `<leader>sc` | Telescope でチャンネル → メッセージを選択してスレッドを開く |
+| `<leader>sr` | 現在のスレッドを最新状態に更新 |
+| `<leader>ss` | バッファの内容をスレッドに返信として送信 |
+| `:w` | 同上（`:w` で送信） |
+
+**UI の見た目（git commit メッセージスタイル）：**
+
+```
+ここに返信を書く
+
+# ── ここより上の内容を送信します ──────────────────────────────
+# channel : #general
+#
+# 12/01 10:30  たいてっく (U0ACHC1D9T6)
+#   最新の返信内容
+#
+# 12/01 10:00  kouhei (U12345678)
+#   その前の返信
+#
+# ━━━ スレッド元 ━━━
+# 11/30 09:00  たいてっく (U0ACHC1D9T6)
+#   スレッドの最初のメッセージ
+```
+
+区切り線より上に返信を書いて `:w` で送信。スレッド履歴は `#` コメントとして表示され、新しい順に並ぶ。
 
 ## 構成
 
@@ -233,7 +265,7 @@ nix-config/
 │   ├── git.nix          # Git
 │   ├── gh.nix           # GitHub CLI
 │   ├── neovim.nix       # Neovim（プラグイン宣言のみ）
-│   ├── slack.nix        # Slack CLI（slack-read / slack-thread / slack-send）
+│   ├── slack.nix        # Slack CLI・環境変数（SLACK_CLI_TOKEN）
 │   └── zsh.nix          # zsh・Starship
 ├── claude/
 │   └── statusline.sh    # Claude Codeステータスライン（~/.config/claude/にリンク）
@@ -244,7 +276,8 @@ nix-config/
         ├── colorscheme.lua  # TokyoNight
         ├── neo-tree.lua     # ファイルツリー
         ├── telescope.lua    # fuzzy finder
-        ├── lualine.lua      # ステータスライン・タブライン
+        ├── lualine.lua      # ステータスライン・カスタムタブライン
+        ├── slack.lua        # Slack TUI（Telescope + スレッド返信バッファ）
         ├── toggleterm.lua   # フローティングターミナル
         ├── winresizer.lua   # ウィンドウリサイズ
         └── claudecode.lua   # Claude Code連携
