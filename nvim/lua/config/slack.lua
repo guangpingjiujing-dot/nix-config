@@ -151,6 +151,45 @@ local function refresh_comment_section()
   end
 end
 
+-- スレッド履歴（# コメント部分）を Claude に渡せる形式で抽出
+local function get_thread_lines_for_claude()
+  if not state.buf or not vim.api.nvim_buf_is_valid(state.buf) then return {} end
+  local all_lines = vim.api.nvim_buf_get_lines(state.buf, 0, -1, false)
+  local result = {}
+  local in_thread = false
+  for _, line in ipairs(all_lines) do
+    if line == SEPARATOR then
+      in_thread = true
+    elseif in_thread then
+      -- "# text" → "text"、"#" → "" に変換してきれいなテキストにする
+      local content = line:match("^#%s?(.*)$")
+      table.insert(result, content ~= nil and content or line)
+    end
+  end
+  return result
+end
+
+local function send_lines_to_claude(lines)
+  local tmp = "/tmp/slack-thread-for-claude.txt"
+  local f = io.open(tmp, "w")
+  if not f then
+    vim.notify("一時ファイルの作成に失敗しました", vim.log.levels.ERROR)
+    return
+  end
+  f:write(table.concat(lines, "\n"))
+  f:close()
+  local claude_visible = false
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    if vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(win)):lower():match("claude") then
+      claude_visible = true; break
+    end
+  end
+  vim.cmd("ClaudeCodeAdd " .. vim.fn.fnameescape(tmp))
+  if claude_visible then
+    vim.schedule(function() vim.cmd("ClaudeCodeFocus") end)
+  end
+end
+
 local function ensure_buf()
   if state.buf and vim.api.nvim_buf_is_valid(state.buf) then return end
   state.buf = vim.api.nvim_create_buf(true, false)
@@ -165,6 +204,21 @@ local function ensure_buf()
       vim.api.nvim_set_option_value("modified", false, { buf = state.buf })
     end,
   })
+  -- ClaudeCode 連携: Slack バッファでは % が使えないため一時ファイル経由で渡す
+  vim.keymap.set("n", "<leader>ab", function()
+    send_lines_to_claude(get_thread_lines_for_claude())
+  end, { buffer = state.buf, desc = "Slack: add thread to Claude Code" })
+  vim.keymap.set("v", "<leader>as", function()
+    local s = vim.fn.line("'<")
+    local e = vim.fn.line("'>")
+    local lines = vim.api.nvim_buf_get_lines(state.buf, s - 1, e, false)
+    local clean = {}
+    for _, line in ipairs(lines) do
+      local content = line:match("^#%s?(.*)$")
+      table.insert(clean, content ~= nil and content or line)
+    end
+    send_lines_to_claude(clean)
+  end, { buffer = state.buf, desc = "Slack: add selection to Claude Code" })
 end
 
 local function find_main_win()
