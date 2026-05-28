@@ -53,6 +53,24 @@ require("neo-tree").setup({
   },
 })
 
+-- バッファ切り替え時に follow_current_file が選択を更新した後、neo-tree 内で中央揃えする
+vim.api.nvim_create_autocmd("BufEnter", {
+  callback = function()
+    if vim.bo.filetype == "neo-tree" then return end
+    vim.schedule(function()
+      for _, win in ipairs(vim.api.nvim_list_wins()) do
+        local buf = vim.api.nvim_win_get_buf(win)
+        if vim.bo[buf].filetype == "neo-tree" then
+          vim.api.nvim_win_call(win, function()
+            vim.cmd("normal! zz")
+          end)
+          break
+        end
+      end
+    end)
+  end,
+})
+
 -- <Space>e でファイルツリーを開閉（LazyVim のデフォルトと同じ）
 vim.keymap.set("n", "<leader>e", ":Neotree toggle position=left<CR>", {
   silent = true,

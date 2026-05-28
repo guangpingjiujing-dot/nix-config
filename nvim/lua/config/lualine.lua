@@ -2,6 +2,24 @@ require("lualine").setup({
   options = {
     theme = "tokyonight",
   },
+  sections = {
+    lualine_c = {
+      {
+        "filename",
+        path = 1,
+        color = { fg = "#c0caf5", gui = "bold" },
+      },
+    },
+  },
+  inactive_sections = {
+    lualine_c = {
+      {
+        "filename",
+        path = 1,
+        color = { fg = "#7aa2f7", gui = "bold" },
+      },
+    },
+  },
   -- tabline は自前実装のため lualine では設定しない
 })
 
@@ -11,6 +29,10 @@ local function is_excluded(buf)
   if ok_ft and ft == "neo-tree" then return true end
   return false
 end
+
+-- モードに応じてアクティブバッファのハイライトグループを切り替える
+-- lualine の同名グループを再利用することで下のステータスバーと色が一致する
+local _tabline_hl = "lualine_a_normal"
 
 local function my_tabline()
   local current = vim.api.nvim_get_current_buf()
@@ -33,22 +55,44 @@ local function my_tabline()
   table.sort(bufs)
 
   local result = ""
-  for _, buf in ipairs(bufs) do
+  for i, buf in ipairs(bufs) do
     local name = vim.api.nvim_buf_get_name(buf)
     local short = vim.fn.fnamemodify(name, ":t")
     if short == "" then short = "[No Name]" end
+    short = short:gsub("%s*%([0-9a-f]+%)", "")
+    short = short:gsub("%s*🔒%s*%(proposed%)", "")
+    short = short:gsub("%s*%(proposed%)", "")
     local modified = vim.bo[buf].modified and " ●" or ""
     local display = " " .. buf .. " " .. short .. modified .. " "
+    if i > 1 then
+      result = result .. "%#lualine_c_normal#│"
+    end
     if buf == current then
-      result = result .. "%#lualine_a_normal#" .. display .. "%#lualine_b_normal#"
+      result = result .. "%#" .. _tabline_hl .. "#" .. display .. "%#lualine_b_normal#"
     else
       result = result .. "%#lualine_b_normal#" .. display
     end
   end
 
-  return result .. "%#lualine_c_normal#%="
+  return "%#lualine_c_normal#%=" .. result .. "%#lualine_c_normal#%="
 end
 
 _G._my_tabline = my_tabline
 vim.o.tabline = "%!v:lua._my_tabline()"
 vim.o.showtabline = 2
+
+-- ModeChanged でモードを検出し、タブラインのアクティブバッファ色を即座に更新する
+vim.api.nvim_create_autocmd("ModeChanged", {
+  pattern = "*",
+  callback = function()
+    local mode = vim.fn.mode()
+    if mode == "i" or mode == "ic" or mode == "ix" then
+      _tabline_hl = "lualine_a_insert"
+    elseif mode == "v" or mode == "V" or mode == "\22" then
+      _tabline_hl = "lualine_a_visual"
+    else
+      _tabline_hl = "lualine_a_normal"
+    end
+    vim.cmd("redrawtabline")
+  end,
+})
