@@ -5,12 +5,10 @@ require("lualine").setup({
   -- tabline は自前実装のため lualine では設定しない
 })
 
--- カスタムタブライン（neo-tree・Claude を常に除外）
+-- カスタムタブライン（neo-tree を常に除外、terminal バッファは buftype フィルタで除外）
 local function is_excluded(buf)
   local ok_ft, ft = pcall(function() return vim.bo[buf].filetype end)
   if ok_ft and ft == "neo-tree" then return true end
-  local ok_name, name = pcall(vim.api.nvim_buf_get_name, buf)
-  if ok_name and name:lower():match("claude") then return true end
   return false
 end
 
