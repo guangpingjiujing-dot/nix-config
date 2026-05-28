@@ -55,7 +55,7 @@ jq --arg name "general" '.[] | select(.name | ascii_downcase == ($name | ascii_d
 
 - 見つかったもの → 結果リストに追加
 - 見つからなかったもの → 警告としてメモしておく
- aa
+ 
 ### 4. ~/.config/slack/channels.json を書き込む
 
 ```bash
