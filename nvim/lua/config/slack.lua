@@ -33,6 +33,24 @@ end
 
 local CHANNELS_FILE = vim.fn.expand("~/.config/slack/channels.json")
 
+-- ワークスペース URL をキャッシュ（auth.test は初回のみ呼ぶ）
+local workspace_url = nil
+local function get_workspace_url()
+  if workspace_url then return workspace_url end
+  local data = api_get("auth.test", "")
+  if data and data.ok and data.url then
+    workspace_url = data.url:gsub("/$", "")  -- 末尾スラッシュを除去
+  end
+  return workspace_url
+end
+
+local function build_thread_url(channel_id, ts)
+  local base = get_workspace_url()
+  if not base or not channel_id or not ts then return nil end
+  local ts_no_dot = ts:gsub("%.", "")
+  return base .. "/archives/" .. channel_id .. "/p" .. ts_no_dot
+end
+
 local function load_users()
   local f = io.open("/tmp/slack-users.json", "r")
   if not f then return {} end
@@ -181,6 +199,8 @@ local function send_lines_to_claude(lines)
   f:write("Channel: " .. ch .. "\n")
   if state.thread_ts then
     f:write("Date: " .. fmt_ts(state.thread_ts) .. "\n")
+    local url = build_thread_url(state.channel_id, state.thread_ts)
+    if url then f:write("Thread URL: " .. url .. "\n") end
   end
   f:write("\n")
   f:write(table.concat(lines, "\n"))
