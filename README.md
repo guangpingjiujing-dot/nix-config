@@ -172,7 +172,8 @@ home-manager switch --flake path:$(pwd)
 
 ## Slack トークンの取得
 
-`slack-term`（ターミナル上で動作するSlack TUIクライアント）を使うには、Slack API トークンが必要。
+`slack-cli` + zsh 関数でターミナルから Slack のメッセージ閲覧・送信ができる。
+利用には Slack API トークンが必要。
 
 ### 1. Slack App を作成する
 
@@ -185,12 +186,13 @@ home-manager switch --flake path:$(pwd)
 
 | スコープ | 用途 |
 |---|---|
+| `channels:read` | パブリックチャンネル一覧 |
 | `channels:history` | パブリックチャンネルのメッセージ読み取り |
-| `channels:read` | チャンネル一覧の取得 |
-| `im:history` | DM の読み取り |
-| `im:read` | DM チャンネル一覧 |
-| `groups:history` | プライベートチャンネルのメッセージ読み取り |
 | `groups:read` | プライベートチャンネル一覧 |
+| `groups:history` | プライベートチャンネルのメッセージ読み取り |
+| `im:read` | DM チャンネル一覧 |
+| `im:history` | DM の読み取り |
+| `mpim:read` | グループ DM 一覧 |
 | `users:read` | ユーザー名の表示 |
 | `chat:write` | メッセージの送信 |
 
@@ -205,17 +207,17 @@ home-manager switch --flake path:$(pwd)
 slackToken = "xoxp-xxxxxxxxxx-...";
 ```
 
-設定後 `home-manager switch` を実行すると `~/.config/slack-term/config` に自動で書き込まれる。
+設定後 `home-manager switch --flake path:$(pwd)` を実行するとトークンが環境変数 `SLACK_CLI_TOKEN` に設定される。
 
-### slack-term の基本操作
+### 使い方
 
-| キー | 操作 |
+| コマンド | 操作 |
 |---|---|
-| `↑` / `↓` または `k` / `j` | チャンネル切り替え |
-| `i` | メッセージ入力モード |
-| `Enter` | 送信 |
-| `Esc` | 入力モード終了 |
-| `q` | 終了 |
+| `slack-read` | fzf でチャンネルを選択してメッセージ一覧を表示 |
+| `slack-read <channel_id> <limit>` | チャンネルIDと件数を直接指定 |
+| `slack-thread` | fzf でチャンネル→メッセージを選択してスレッド返信を表示 |
+| `slack-send` | fzf でチャンネルを選択してメッセージを送信 |
+| `slack-send "text"` | テキストを引数で直接渡して送信 |
 
 ## 構成
 
@@ -231,6 +233,7 @@ nix-config/
 │   ├── git.nix          # Git
 │   ├── gh.nix           # GitHub CLI
 │   ├── neovim.nix       # Neovim（プラグイン宣言のみ）
+│   ├── slack.nix        # Slack CLI（slack-read / slack-thread / slack-send）
 │   └── zsh.nix          # zsh・Starship
 ├── claude/
 │   └── statusline.sh    # Claude Codeステータスライン（~/.config/claude/にリンク）
