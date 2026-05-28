@@ -106,7 +106,7 @@ local function build_comment_lines(channel_id, ts)
     local bot_name = msg.bot_profile and msg.bot_profile.name
     local name = fmt_user(users, msg.user, bot_name)
     local time = fmt_ts(msg.ts)
-    if i < #msgs then table.insert(lines, "#") end
+    if i < #msgs then table.insert(lines, "# " .. string.rep("─", 52)) end
     if i == 1 then table.insert(lines, "# ━━━ スレッド元 ━━━") end
     table.insert(lines, "# " .. time .. "  " .. name)
     for _, line in ipairs(vim.split(msg_text(msg), "\n", { plain = true })) do
@@ -176,6 +176,13 @@ local function send_lines_to_claude(lines)
     vim.notify("一時ファイルの作成に失敗しました", vim.log.levels.ERROR)
     return
   end
+  local ch = state.channel_name and ("#" .. state.channel_name) or (state.channel_id or "unknown")
+  f:write("[Slack Thread]\n")
+  f:write("Channel: " .. ch .. "\n")
+  if state.thread_ts then
+    f:write("Date: " .. fmt_ts(state.thread_ts) .. "\n")
+  end
+  f:write("\n")
   f:write(table.concat(lines, "\n"))
   f:close()
   local claude_visible = false
