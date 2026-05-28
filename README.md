@@ -218,6 +218,7 @@ slackToken = "xoxp-xxxxxxxxxx-...";
 | `slack-thread` | fzf でチャンネル→メッセージを選択してスレッド返信を表示 |
 | `slack-send` | fzf でチャンネルを選択してメッセージを送信 |
 | `slack-send "text"` | テキストを引数で直接渡して送信 |
+| `slack-users-refresh` | ユーザー名キャッシュ（`/tmp/slack-users.json`）を強制更新 |
 
 ### Neovim での使い方
 
@@ -229,6 +230,20 @@ Telescope を使ったインタラクティブなスレッド閲覧・返信 UI�
 | `<leader>sr` | 現在のスレッドを最新状態に更新 |
 | `<leader>ss` | バッファの内容をスレッドに返信として送信 |
 | `:w` | 同上（`:w` で送信） |
+
+**チャンネルリストのカスタマイズ（`~/.config/slack/channels.json`）：**
+
+`<leader>sc` はこのファイルが存在すればそこから読み込む（API 呼び出しなしで即座に開く）。
+ファイルがない場合は参加済みチャンネルを API から取得する。
+
+```json
+[
+  {"id": "C01234567", "name": "general"},
+  {"id": "C89012345", "name": "random"}
+]
+```
+
+チャンネル ID は Slack の URL（`slack://channel?id=C...`）またはチャンネル詳細画面で確認できる。
 
 **UI の見た目（git commit メッセージスタイル）：**
 

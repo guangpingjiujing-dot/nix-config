@@ -31,6 +31,8 @@ local function api_post(endpoint, payload)
   return ok and data or nil
 end
 
+local CHANNELS_FILE = vim.fn.expand("~/.config/slack/channels.json")
+
 local function load_users()
   local f = io.open("/tmp/slack-users.json", "r")
   if not f then return {} end
@@ -38,6 +40,32 @@ local function load_users()
   f:close()
   local ok, data = pcall(vim.fn.json_decode, content)
   return (ok and type(data) == "table") and data or {}
+end
+
+local function load_channels_from_file()
+  local f = io.open(CHANNELS_FILE, "r")
+  if not f then return nil end
+  local content = f:read("*a")
+  f:close()
+  local ok, data = pcall(vim.fn.json_decode, content)
+  return (ok and type(data) == "table") and data or nil
+end
+
+local function fetch_joined_channels()
+  local channels = {}
+  local cursor = ""
+  while true do
+    local params = "types=public_channel,private_channel,mpim,im&limit=1000&exclude_archived=true"
+    if cursor ~= "" then params = params .. "&cursor=" .. cursor end
+    local data = api_get("conversations.list", params)
+    if not data or not data.ok then break end
+    for _, ch in ipairs(data.channels or {}) do
+      if ch.is_member then table.insert(channels, ch) end
+    end
+    cursor = (data.response_metadata and data.response_metadata.next_cursor) or ""
+    if cursor == "" then break end
+  end
+  return channels
 end
 
 local function fmt_user(users, user_id, bot_name)
@@ -222,16 +250,12 @@ function M.pick()
     return
   end
 
-  local channels = {}
-  local cursor = ""
-  while true do
-    local params = "types=public_channel,private_channel,mpim,im&limit=1000&exclude_archived=true"
-    if cursor ~= "" then params = params .. "&cursor=" .. cursor end
-    local data = api_get("conversations.list", params)
-    if not data or not data.ok then break end
-    vim.list_extend(channels, data.channels or {})
-    cursor = (data.response_metadata and data.response_metadata.next_cursor) or ""
-    if cursor == "" then break end
+  local channels = load_channels_from_file()
+  if channels then
+    vim.notify("チャンネルリスト: " .. CHANNELS_FILE, vim.log.levels.INFO)
+  else
+    vim.notify("チャンネルを取得中（参加済みのみ）...", vim.log.levels.INFO)
+    channels = fetch_joined_channels()
   end
 
   local pickers = require("telescope.pickers")
@@ -261,15 +285,13 @@ function M.pick()
         local ch = entry.value
         vim.schedule(function()
           local users = load_users()
-          local data = api_get("conversations.history", "channel=" .. ch.id .. "&limit=50")
+          local data = api_get("conversations.history", "channel=" .. ch.id .. "&limit=30")
           if not data or not data.ok then
             vim.notify("メッセージの取得に失敗: " .. (data and data.error or "error"), vim.log.levels.ERROR)
             return
           end
-          local msgs = {}
-          for i = #(data.messages or {}), 1, -1 do
-            table.insert(msgs, data.messages[i])
-          end
+          -- API は newest-first で返す → Telescope ではトップが古い、ボトムが新しい順になる
+          local msgs = data.messages or {}
           pickers.new({}, {
             prompt_title = "Slack: #" .. (ch.name or ch.id),
             finder = finders.new_table({
