@@ -8,9 +8,21 @@ require("neo-tree").setup({
     position = "left",
     width = 45,
     mappings = {
+      ["<leader>yn"] = function(state)
+        local node = state.tree:get_node()
+        local name = vim.fn.fnamemodify(node:get_id(), ":t")
+        vim.fn.setreg("+", name)
+        vim.notify("Copied: " .. name)
+      end,
       ["<leader>yp"] = function(state)
         local node = state.tree:get_node()
         local path = vim.fn.fnamemodify(node:get_id(), ":.")
+        vim.fn.setreg("+", path)
+        vim.notify("Copied: " .. path)
+      end,
+      ["<leader>yP"] = function(state)
+        local node = state.tree:get_node()
+        local path = vim.fn.fnamemodify(node:get_id(), ":p")
         vim.fn.setreg("+", path)
         vim.notify("Copied: " .. path)
       end,
