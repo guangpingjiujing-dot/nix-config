@@ -45,6 +45,9 @@ vim.opt.signcolumn = "yes:1"
 
 -- 長い行を折り返さない
 vim.opt.wrap = false
+vim.keymap.set("n", "<leader>uw", function()
+  vim.opt.wrap = not vim.opt.wrap:get()
+end, { desc = "Toggle wrap" })
 
 -- ヤンクをシステムクリップボードと共有する
 -- これにより y でコピーしたものを Cmd+V で他のアプリに貼り付けられる
