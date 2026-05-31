@@ -29,36 +29,6 @@ vim.keymap.set("t", "<C-l>", function() term_smart_move("l", "h") end)
 vim.keymap.set("n", "<S-h>", "<cmd>bprevious<CR>", { desc = "Prev buffer" })
 vim.keymap.set("n", "<S-l>", "<cmd>bnext<CR>", { desc = "Next buffer" })
 
--- バッファを削除してもウィンドウレイアウトを維持する
--- そのバッファを表示しているすべてのウィンドウを代替バッファに切り替えてから削除する
-local function smart_buf_delete()
-  local cur = vim.fn.bufnr()
-  local wins = vim.fn.win_findbuf(cur)
-
-  local alt = vim.fn.bufnr("#")
-  local replacement = (alt > 0 and alt ~= cur and vim.bo[alt].buflisted) and alt or nil
-  if not replacement then
-    local others = vim.tbl_filter(function(b)
-      return vim.bo[b].buflisted and b ~= cur
-    end, vim.api.nvim_list_bufs())
-    replacement = others[1]
-  end
-
-  for _, win in ipairs(wins) do
-    if replacement then
-      vim.api.nvim_win_set_buf(win, replacement)
-    else
-      vim.api.nvim_win_set_buf(win, vim.api.nvim_create_buf(true, false))
-    end
-  end
-
-  vim.api.nvim_buf_delete(cur, { force = false })
-end
-
--- :bd をスマート削除にオーバーライド
-vim.api.nvim_create_user_command("BD", smart_buf_delete, { desc = "Delete buffer (preserve layout)" })
-vim.cmd([[cabbrev bd BD]])
-
 -- バッファのパスをクリップボードにコピー
 vim.keymap.set("n", "<leader>yn", function() vim.fn.setreg("+", vim.fn.expand("%:t")) end, { desc = "Yank filename" })
 vim.keymap.set("n", "<leader>yp", function() vim.fn.setreg("+", vim.fn.expand("%:.")) end, { desc = "Yank relative path" })

@@ -57,6 +57,16 @@
           hash = "sha256-zpjqCARlQU6g50s8wpaqN9xFK4tdUbrxU6MJrQZfSA8=";
         };
       })
+
+      (pkgs.vimUtils.buildVimPlugin {
+        name = "close-buffers-nvim";
+        src = pkgs.fetchFromGitHub {
+          owner = "kazhala";
+          repo = "close-buffers.nvim";
+          rev = "3acbcad1211572342632a6c0151f839e7dead27f";
+          hash = "sha256-/jk38ebxKTlyH3AsrSQWMl/cErmu6threyy/MIrdzD4=";
+        };
+      })
     ];
 
   };
