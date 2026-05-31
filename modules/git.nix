@@ -7,6 +7,7 @@
     settings.user.email = gitEmail;
     settings.core.quotepath = false;
     settings.status.showUntrackedFiles = "all";
+    settings.diff.colorMoved = "default";
   };
 
   programs.delta = {
@@ -17,6 +18,4 @@
       line-numbers = true;
     };
   };
-
-  programs.git.settings.diff.colorMoved = "default";
 }
