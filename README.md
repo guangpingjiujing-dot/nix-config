@@ -130,6 +130,8 @@ home-manager switch --flake path:$(pwd)
       "Bash(docker compose *)",
       "Bash(docker exec *)",
       "Bash(gcloud secrets list *)",
+      "Bash(gcloud secrets versions list *)",
+      "Bash(gcloud secrets versions access *)",
       "Bash(gcloud storage ls *)",
       "Bash(gcloud storage buckets describe *)",
       "Bash(gcloud storage buckets list *)",
