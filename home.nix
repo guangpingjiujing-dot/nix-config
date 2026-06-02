@@ -44,6 +44,7 @@
     pyright            # Python LSP サーバー（pyright-langserver バイナリを含む）
     minikube           # ローカル Kubernetes クラスタ
     kubectl            # Kubernetes CLI
+    sqlite             # SQLite CLI（sqlite3 コマンド）
     nerd-fonts.jetbrains-mono  # JetBrainsMono Nerd Font（Ghostty・Neovim のアイコン表示に必要）
 
     # Python インタープリタ（複数バージョンをグローバルで利用可能にする）
