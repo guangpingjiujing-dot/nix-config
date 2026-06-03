@@ -6,10 +6,4 @@ require("toggleterm").setup({
   float_opts = {
     border = "curved",
   },
-  on_open = function(term)
-    vim.schedule(function()
-      local cwd = vim.fn.getcwd()
-      term:send("cd " .. vim.fn.shellescape(cwd) .. " && git status")
-    end)
-  end,
 })
