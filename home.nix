@@ -26,6 +26,13 @@
   # home-manager自身をhome-managerで管理する（推奨設定）
   programs.home-manager.enable = true;
 
+  # bq query のデフォルトを標準 SQL にする（レガシー SQL は廃止予定のため）
+  home.file.".bigqueryrc".text = ''
+    [query]
+    --use_legacy_sql=false
+    --maximum_bytes_billed=150000000000
+  '';
+
   # home.packages: プログラム固有の設定が不要なツールをまとめてインストールする場所
   # 設定ファイルが必要なツールは modules/ 配下で programs.<name> として管理する
   home.packages = with pkgs; [
