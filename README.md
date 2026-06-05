@@ -98,6 +98,7 @@ home-manager switch --flake path:$(pwd)
       "WebFetch",
       "Bash(git *)",
       "Bash(gh *)",
+      "Bash(cd *)",
       "Bash(ls *)",
       "Bash(find *)",
       "Bash(find * | head *)",
