@@ -7,6 +7,9 @@ local function smart_move(dir, wrap_dir)
   if vim.api.nvim_get_current_win() == win_before then
     vim.cmd("999wincmd " .. wrap_dir)
   end
+  if vim.bo.buftype == "terminal" then
+    vim.cmd("startinsert")
+  end
 end
 
 vim.keymap.set("n", "<C-h>", function() smart_move("h", "l") end)
