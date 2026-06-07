@@ -24,6 +24,8 @@ vim.keymap.set("t", "<C-h>", function() term_smart_move("h", "l") end)
 vim.keymap.set("t", "<C-j>", function() term_smart_move("j", "k") end)
 vim.keymap.set("t", "<C-k>", function() term_smart_move("k", "j") end)
 vim.keymap.set("t", "<C-l>", function() term_smart_move("l", "h") end)
+vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
+vim.keymap.set("t", "<C-[>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
 -- バッファ間の移動（LazyVim 標準の <S-h> / <S-l>）
 vim.keymap.set("n", "<S-h>", "<cmd>bprevious<CR>", { desc = "Prev buffer" })
@@ -67,6 +69,15 @@ vim.api.nvim_create_autocmd({ "InsertLeave", "TermLeave", "WinEnter", "FocusGain
   pattern = "*",
   callback = function()
     vim.fn.system("macism com.apple.keylayout.ABC")
+  end,
+})
+
+vim.api.nvim_create_autocmd("TermOpen", {
+  pattern = "*",
+  callback = function()
+    vim.opt_local.number = false
+    vim.opt_local.relativenumber = false
+    vim.opt_local.statuscolumn = ""
   end,
 })
 

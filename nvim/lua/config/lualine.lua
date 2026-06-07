@@ -30,10 +30,15 @@ require("lualine").setup({
   -- tabline は自前実装のため lualine では設定しない
 })
 
--- カスタムタブライン（neo-tree を常に除外、terminal バッファは buftype フィルタで除外）
+-- カスタムタブライン（neo-tree と claudecode ターミナルを除外）
 local function is_excluded(buf)
   local ok_ft, ft = pcall(function() return vim.bo[buf].filetype end)
   if ok_ft and ft == "neo-tree" then return true end
+  local ok_bt, bt = pcall(function() return vim.bo[buf].buftype end)
+  if ok_bt and bt == "terminal" then
+    local name = vim.api.nvim_buf_get_name(buf)
+    if name:match("claude") then return true end
+  end
   return false
 end
 
@@ -47,10 +52,10 @@ local function my_tabline()
 
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
     if not vim.api.nvim_buf_is_loaded(buf) then goto continue end
-    -- 通常ファイル (buftype="") と Slack バッファ (buftype="acwrite") のみ対象
+    -- 通常ファイル・Slack (acwrite)・ターミナルを対象とする
     local ok_bt, bt = pcall(function() return vim.bo[buf].buftype end)
     if not ok_bt then goto continue end
-    if bt ~= "" and bt ~= "acwrite" then goto continue end
+    if bt ~= "" and bt ~= "acwrite" and bt ~= "terminal" then goto continue end
     -- 無名バッファはスキップ
     local name = vim.api.nvim_buf_get_name(buf)
     if name == "" then goto continue end
@@ -64,7 +69,14 @@ local function my_tabline()
   local result = ""
   for i, buf in ipairs(bufs) do
     local name = vim.api.nvim_buf_get_name(buf)
-    local short = vim.fn.fnamemodify(name, ":t")
+    local bt2 = vim.bo[buf].buftype
+    local short
+    if bt2 == "terminal" then
+      local cmd = name:match("term://.-//.-:(.+)$") or name
+      short = vim.fn.fnamemodify(cmd, ":t")
+    else
+      short = vim.fn.fnamemodify(name, ":t")
+    end
     if short == "" then short = "[No Name]" end
     short = short:gsub("%s*%([0-9a-f]+%)", "")
     short = short:gsub("%s*🔒%s*%(proposed%)", "")
