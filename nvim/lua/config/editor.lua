@@ -27,6 +27,17 @@ vim.keymap.set("t", "<C-l>", function() term_smart_move("l", "h") end)
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 vim.keymap.set("t", "<C-[>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
+-- タブラインのバッファ名を変更する（空文字で入力するとリセット）
+vim.keymap.set("n", "<leader>br", function()
+  local buf = vim.api.nvim_get_current_buf()
+  local current = vim.b[buf].tabline_label or ""
+  vim.ui.input({ prompt = "Buffer label: ", default = current }, function(input)
+    if input == nil then return end
+    vim.b[buf].tabline_label = input
+    vim.cmd("redrawtabline")
+  end)
+end, { desc = "Rename buffer label" })
+
 -- バッファ間の移動（LazyVim 標準の <S-h> / <S-l>）
 vim.keymap.set("n", "<S-h>", "<cmd>bprevious<CR>", { desc = "Prev buffer" })
 vim.keymap.set("n", "<S-l>", "<cmd>bnext<CR>", { desc = "Next buffer" })

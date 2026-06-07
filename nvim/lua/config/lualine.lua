@@ -71,7 +71,9 @@ local function my_tabline()
     local name = vim.api.nvim_buf_get_name(buf)
     local bt2 = vim.bo[buf].buftype
     local short
-    if bt2 == "terminal" then
+    if vim.b[buf].tabline_label and vim.b[buf].tabline_label ~= "" then
+      short = vim.b[buf].tabline_label
+    elseif bt2 == "terminal" then
       local cmd = name:match("term://.-//.-:(.+)$") or name
       short = vim.fn.fnamemodify(cmd, ":t")
     else
