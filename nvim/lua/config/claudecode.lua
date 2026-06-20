@@ -153,7 +153,26 @@ vim.keymap.set("v", "<leader>as", function()
     vim.notify("Claude is not open", vim.log.levels.WARN)
     return
   end
-  vim.cmd("ClaudeCodeSend")
+  if vim.bo.buftype == "terminal" then
+    local s = vim.fn.line("'<") - 1
+    local e = vim.fn.line("'>")
+    local lines = vim.api.nvim_buf_get_lines(0, s, e, false)
+    local text = table.concat(lines, "\n")
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+      if vim.api.nvim_buf_is_loaded(buf)
+        and vim.bo[buf].buftype == "terminal"
+        and vim.api.nvim_buf_get_name(buf):lower():match("claude")
+      then
+        local chan = vim.b[buf].terminal_job_id
+        if chan then
+          vim.fn.chansend(chan, "\27[200~" .. text .. "\27[201~")
+          break
+        end
+      end
+    end
+  else
+    vim.cmd("ClaudeCodeSend")
+  end
   vim.schedule(function() vim.cmd("ClaudeCodeFocus") end)
 end, { desc = "Send to Claude" })
 vim.keymap.set("n", "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>",  { desc = "Accept diff" })
