@@ -1,32 +1,26 @@
--- ウィンドウ間の移動（LazyVim 標準の <C-hjkl>）
--- 端まで来たら反対側にラップアラウンドする
--- ターミナルモードでも同じキーで移動できるようにする（Claude Code 動作中でもペイン移動可能）
-local function smart_move(dir, wrap_dir)
-  local win_before = vim.api.nvim_get_current_win()
+-- ターミナルモードでも <C-hjkl> でウィンドウ移動できるようにする（Claude Code 動作中でもペイン移動可能）
+local function smart_move(dir)
   vim.cmd("wincmd " .. dir)
-  if vim.api.nvim_get_current_win() == win_before then
-    vim.cmd("999wincmd " .. wrap_dir)
-  end
   if vim.bo.buftype == "terminal" then
     vim.cmd("startinsert")
   end
 end
 
-vim.keymap.set("n", "<C-h>", function() smart_move("h", "l") end)
-vim.keymap.set("n", "<C-j>", function() smart_move("j", "k") end)
-vim.keymap.set("n", "<C-k>", function() smart_move("k", "j") end)
-vim.keymap.set("n", "<C-l>", function() smart_move("l", "h") end)
+vim.keymap.set("n", "<C-h>", function() smart_move("h") end)
+vim.keymap.set("n", "<C-j>", function() smart_move("j") end)
+vim.keymap.set("n", "<C-k>", function() smart_move("k") end)
+vim.keymap.set("n", "<C-l>", function() smart_move("l") end)
 
 local esc_t = vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true)
-local function term_smart_move(dir, wrap_dir)
+local function term_smart_move(dir)
   vim.api.nvim_feedkeys(esc_t, "n", false)
-  vim.schedule(function() smart_move(dir, wrap_dir) end)
+  vim.schedule(function() smart_move(dir) end)
 end
 
-vim.keymap.set("t", "<C-h>", function() term_smart_move("h", "l") end)
-vim.keymap.set("t", "<C-j>", function() term_smart_move("j", "k") end)
-vim.keymap.set("t", "<C-k>", function() term_smart_move("k", "j") end)
-vim.keymap.set("t", "<C-l>", function() term_smart_move("l", "h") end)
+vim.keymap.set("t", "<C-h>", function() term_smart_move("h") end)
+vim.keymap.set("t", "<C-j>", function() term_smart_move("j") end)
+vim.keymap.set("t", "<C-k>", function() term_smart_move("k") end)
+vim.keymap.set("t", "<C-l>", function() term_smart_move("l") end)
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 vim.keymap.set("t", "<C-[>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
