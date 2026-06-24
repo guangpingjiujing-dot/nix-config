@@ -26,6 +26,11 @@
         system = local.system;
         # unfreeライセンスのパッケージ（claude-codeなど）を許可する
         config.allowUnfree = true;
+        overlays = [
+          (final: prev: {
+            sling = prev.callPackage ./pkgs/sling { };
+          })
+        ];
       };
     in
     {
