@@ -54,6 +54,8 @@
     kubectl            # Kubernetes CLI
     sqlite             # SQLite CLI（sqlite3 コマンド）
     sling              # ELT ツール（データベース・ファイル間のデータ移動）
+    ollama             # ローカル LLM ランタイム（ollama serve / ollama run）
+    opencode           # ターミナル向け AI コーディングエージェント
     nerd-fonts.jetbrains-mono  # JetBrainsMono Nerd Font（Ghostty・Neovim のアイコン表示に必要）
 
     # Python インタープリタ（複数バージョンをグローバルで利用可能にする）
