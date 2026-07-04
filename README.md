@@ -123,6 +123,7 @@ home-manager switch --flake path:$(pwd)
       "Bash(mkdir *)",
       "Bash(touch *)",
       "Bash(source *)",
+      "Bash(open *)",
       "Bash(nix eval *)",
       "Bash(nix search *)",
       "Bash(ghostty *)",
