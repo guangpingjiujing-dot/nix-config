@@ -14,9 +14,15 @@
       # 同じパッケージが2つのソースから重複して取得されるのを防ぐ
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # hunk: レビュー志向のターミナル diff ビューア（nixpkgs に無いため公式 flake を利用）
+    hunk = {
+      url = "github:modem-dev/hunk";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { nixpkgs, home-manager, ... }:
+  outputs = { nixpkgs, home-manager, hunk, ... }:
     let
       # マシン固有の設定（ユーザー名・ホームディレクトリ・アーキテクチャ）
       # クローン後に local.nix を自分の環境に合わせて編集する（README 参照）。
@@ -29,6 +35,7 @@
         overlays = [
           (final: prev: {
             sling = prev.callPackage ./pkgs/sling { };
+            hunk = hunk.packages.${local.system}.default;
           })
         ];
       };
