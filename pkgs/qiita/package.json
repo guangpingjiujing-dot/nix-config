@@ -1,0 +1,7 @@
+{
+  "name": "qiita-nix",
+  "version": "1.0.0",
+  "dependencies": {
+    "@qiita/qiita-cli": "1.9.1"
+  }
+}
