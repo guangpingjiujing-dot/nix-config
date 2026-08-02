@@ -10,10 +10,9 @@
     # claude-code だけ別ソースから最新版を取る
     # メインの nixpkgs pin は他パッケージの互換性のため据え置きたいが、
     # claude-code は活発に更新されるので新しいバージョンが欲しい。
-    # 現行 nixos-unstable は 26.11 で x86_64-darwin サポートを打ち切ったため、
-    # hunk (flake-parts で全システム評価) の巻き添えで使えない。
-    # nixos-25.11 なら x86_64-darwin サポートを維持しつつ新しめの claude-code を提供している。
-    nixpkgs-claude.url = "github:NixOS/nixpkgs/nixos-25.11";
+    # nixpkgs-unstable は CI チェック済みの最新パッケージが揃うブランチで、
+    # claude-code もリリース版が比較的早く反映される。
+    nixpkgs-claude.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
     # home-manager: ユーザーのパッケージ・dotfilesをNixで管理するツール
     home-manager = {
