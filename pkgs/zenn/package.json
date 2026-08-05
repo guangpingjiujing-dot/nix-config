@@ -1,0 +1,7 @@
+{
+  "name": "zenn-nix",
+  "version": "1.0.0",
+  "dependencies": {
+    "zenn-cli": "0.5.2"
+  }
+}

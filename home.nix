@@ -13,6 +13,7 @@
     ./modules/slack.nix
     ./modules/vercel.nix
     ./modules/nvm.nix
+    ./modules/zenn.nix
     ./modules/zsh.nix
   ];
 
