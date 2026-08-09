@@ -10,9 +10,10 @@
     # claude-code だけ別ソースから最新版を取る
     # メインの nixpkgs pin は他パッケージの互換性のため据え置きたいが、
     # claude-code は活発に更新されるので新しいバージョンが欲しい。
-    # nixpkgs-unstable は CI チェック済みの最新パッケージが揃うブランチで、
-    # claude-code もリリース版が比較的早く反映される。
-    nixpkgs-claude.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    # nixpkgs-unstable は CI 通過待ちで数日遅れるため master を直接見る。
+    # claude-code はビルド済みバイナリを取得するだけのパッケージなので、
+    # master を使ってもビルド失敗のリスクはほぼ無い。
+    nixpkgs-claude.url = "github:NixOS/nixpkgs/master";
 
     # home-manager: ユーザーのパッケージ・dotfilesをNixで管理するツール
     home-manager = {
