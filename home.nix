@@ -60,6 +60,7 @@
     opencode           # ターミナル向け AI コーディングエージェント
     marp-cli           # Markdown → スライド変換 CLI（marp コマンド）
     hunk               # レビュー志向のターミナル diff ビューア（hunk コマンド）
+    ffmpeg             # 動画・音声の変換／編集 CLI（ffmpeg, ffprobe コマンド）
     nerd-fonts.jetbrains-mono  # JetBrainsMono Nerd Font（Ghostty・Neovim のアイコン表示に必要）
 
     # Python インタープリタ（複数バージョンをグローバルで利用可能にする）
