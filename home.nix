@@ -14,6 +14,7 @@
     ./modules/vercel.nix
     ./modules/nvm.nix
     ./modules/zenn.nix
+    ./modules/zvec-grep.nix
     ./modules/zsh.nix
   ];
 
