@@ -30,6 +30,9 @@
   # home-manager自身をhome-managerで管理する（推奨設定）
   programs.home-manager.enable = true;
 
+  # Nix 管理外のツール（codex / cursor-agent / duckdb など）が置かれているため PATH に追加する
+  home.sessionPath = [ "$HOME/.local/bin" ];
+
   # bq query のデフォルトを標準 SQL にする（レガシー SQL は廃止予定のため）
   home.file.".bigqueryrc".text = ''
     [query]
@@ -54,7 +57,7 @@
     nb                 # CLIノート・ブックマーク管理ツール
     pyright            # Python LSP サーバー（pyright-langserver バイナリを含む）
     minikube           # ローカル Kubernetes クラスタ
-    kubectl            # Kubernetes CLI
+    (lib.hiPrio kubectl) # Kubernetes CLI（minikube 同梱の kubectl と衝突するため優先）
     sqlite             # SQLite CLI（sqlite3 コマンド）
     sling              # ELT ツール（データベース・ファイル間のデータ移動）
     ollama             # ローカル LLM ランタイム（ollama serve / ollama run）
