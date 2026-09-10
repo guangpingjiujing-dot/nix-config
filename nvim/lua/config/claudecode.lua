@@ -127,6 +127,25 @@ local function is_claude_visible()
   return false
 end
 
+local FILE_TREE_FT = {
+  NvimTree = true, ["neo-tree"] = true, oil = true, minifiles = true, netrw = true,
+}
+
+local function add_current_to_claude()
+  local visible = is_claude_visible()
+  if FILE_TREE_FT[vim.bo.filetype] then
+    vim.cmd("ClaudeCodeTreeAdd")
+  elseif vim.api.nvim_buf_get_name(0) ~= "" then
+    vim.cmd("ClaudeCodeAdd %")
+  else
+    vim.notify("Current buffer has no file name", vim.log.levels.WARN)
+    return
+  end
+  if visible then
+    vim.schedule(function() vim.cmd("ClaudeCodeFocus") end)
+  end
+end
+
 -- README 推奨のキーバインド
 -- <leader> = Space（init.lua で設定済み）
 vim.keymap.set("n", "<leader>ac", "<cmd>ClaudeCode<cr>",            { desc = "Toggle Claude" })
@@ -134,20 +153,8 @@ vim.keymap.set("n", "<leader>af", "<cmd>ClaudeCodeFocus<cr>",       { desc = "Fo
 vim.keymap.set("n", "<leader>ar", "<cmd>ClaudeCode --resume<cr>",   { desc = "Resume Claude" })
 vim.keymap.set("n", "<leader>aC", "<cmd>ClaudeCode --continue<cr>", { desc = "Continue Claude" })
 vim.keymap.set("n", "<leader>am", "<cmd>ClaudeCodeSelectModel<cr>", { desc = "Select Claude model" })
-vim.keymap.set("n", "<leader>ab", function()
-  local visible = is_claude_visible()
-  vim.cmd("ClaudeCodeAdd %")
-  if visible then
-    vim.schedule(function() vim.cmd("ClaudeCodeFocus") end)
-  end
-end, { desc = "Add current buffer" })
-vim.keymap.set("n", "<leader>as", function()
-  local visible = is_claude_visible()
-  vim.cmd("ClaudeCodeAdd %")
-  if visible then
-    vim.schedule(function() vim.cmd("ClaudeCodeFocus") end)
-  end
-end, { desc = "Send to Claude (add buffer)" })
+vim.keymap.set("n", "<leader>ab", add_current_to_claude, { desc = "Add current buffer" })
+vim.keymap.set("n", "<leader>as", add_current_to_claude, { desc = "Send to Claude (add buffer)" })
 vim.keymap.set("v", "<leader>as", function()
   if not is_claude_visible() then
     vim.notify("Claude is not open", vim.log.levels.WARN)
