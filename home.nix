@@ -8,6 +8,7 @@
     ./modules/gh.nix
     ./modules/ghostty.nix
     ./modules/git.nix
+    ./modules/java.nix
     ./modules/neovim.nix
     ./modules/qiita.nix
     ./modules/slack.nix
