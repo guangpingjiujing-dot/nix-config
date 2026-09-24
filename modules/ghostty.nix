@@ -16,7 +16,11 @@
     settings = {
       # ターミナルのフォント
       # "Mono"サフィックスは等幅グリフを優先するバリアント（ターミナル向け）
-      font-family = "JetBrainsMono Nerd Font Mono";
+      # 2つ目以降はフォールバック。日本語は JetBrainsMono に無いため、
+      # 自動フォールバック任せだと BIZ UDGothic が選ばれ、句読点が縦書き字形
+      # （。→°、、→´ に見える）で描画されることがある（Ghostty 1.3.1 で発生）。
+      # macOS 標準の Hiragino Sans を明示して回避する。
+      font-family = [ "JetBrainsMono Nerd Font Mono" "Hiragino Sans" ];
       font-size = 14;
       font-feature = ["-liga" "-calt"];
 
