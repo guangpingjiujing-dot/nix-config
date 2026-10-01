@@ -61,6 +61,7 @@
     sling              # ELT ツール（データベース・ファイル間のデータ移動）
     ollama             # ローカル LLM ランタイム（ollama serve / ollama run）
     opencode           # ターミナル向け AI コーディングエージェント
+    antigravity-cli    # Google Antigravity CLI（agy コマンド。個人向け Gemini CLI の後継）
     marp-cli           # Markdown → スライド変換 CLI（marp コマンド）
     hunk               # レビュー志向のターミナル diff ビューア（hunk コマンド）
     ffmpeg             # 動画・音声の変換／編集 CLI（ffmpeg, ffprobe コマンド）
