@@ -1,7 +1,0 @@
-{
-  "name": "zvec-grep-nix",
-  "version": "1.0.0",
-  "dependencies": {
-    "@zvec/zvec-grep": "0.2.1"
-  }
-}

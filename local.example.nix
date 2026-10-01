@@ -15,7 +15,4 @@
   # Git の個人情報
   gitName = "Your Name";
   gitEmail = "your@email.com";
-
-  # Slack API トークン（api.slack.com で取得、README 参照）
-  slackToken = "xoxp-your-slack-token-here";
 }

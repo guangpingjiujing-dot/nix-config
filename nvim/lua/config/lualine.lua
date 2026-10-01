@@ -52,7 +52,7 @@ local function my_tabline()
 
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
     if not vim.api.nvim_buf_is_loaded(buf) then goto continue end
-    -- 通常ファイル・Slack (acwrite)・ターミナルを対象とする
+    -- 通常ファイル・acwrite バッファ・ターミナルを対象とする
     local ok_bt, bt = pcall(function() return vim.bo[buf].buftype end)
     if not ok_bt then goto continue end
     if bt ~= "" and bt ~= "acwrite" and bt ~= "terminal" then goto continue end

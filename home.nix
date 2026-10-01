@@ -11,11 +11,9 @@
     ./modules/java.nix
     ./modules/neovim.nix
     ./modules/qiita.nix
-    ./modules/slack.nix
     ./modules/vercel.nix
     ./modules/nvm.nix
     ./modules/zenn.nix
-    ./modules/zvec-grep.nix
     ./modules/zsh.nix
   ];
 

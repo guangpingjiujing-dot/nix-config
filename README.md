@@ -29,7 +29,6 @@ cd ~/.config/nix-config
   system = "aarch64-darwin";      # Intel Mac の場合は "x86_64-darwin"
   gitName = "Your Name";
   gitEmail = "your@email.com";
-  slackToken = "xoxp-...";        # Slack API トークン（下記参照）
 }
 ```
 
@@ -174,102 +173,6 @@ home-manager switch --flake path:$(pwd)
 
 スクリプト本体（`~/.config/claude/statusline.sh`）は `home-manager switch` で自動的に配置される。
 
-## Slack トークンの取得
-
-`slack-cli` + zsh 関数でターミナルから Slack のメッセージ閲覧・送信ができる。
-利用には Slack API トークンが必要。
-
-### 1. Slack App を作成する
-
-1. [api.slack.com/apps](https://api.slack.com/apps) にアクセスし「Create New App」→「From scratch」
-2. App Name（任意）とワークスペースを設定して作成
-
-### 2. OAuth スコープを追加する
-
-左メニュー「OAuth & Permissions」→「User Token Scopes」に以下を追加：
-
-| スコープ | 用途 |
-|---|---|
-| `channels:read` | パブリックチャンネル一覧 |
-| `channels:history` | パブリックチャンネルのメッセージ読み取り |
-| `groups:read` | プライベートチャンネル一覧 |
-| `groups:history` | プライベートチャンネルのメッセージ読み取り |
-| `im:read` | DM チャンネル一覧 |
-| `im:history` | DM の読み取り |
-| `mpim:read` | グループ DM 一覧 |
-| `users:read` | ユーザー名の表示 |
-| `chat:write` | メッセージの送信 |
-
-### 3. トークンを発行する
-
-「Install to Workspace」→ ワークスペースへのインストールを許可すると、
-「User OAuth Token」（`xoxp-` で始まる文字列）が発行される。
-
-### 4. local.nix に設定する
-
-```nix
-slackToken = "xoxp-xxxxxxxxxx-...";
-```
-
-設定後 `home-manager switch --flake path:$(pwd)` を実行するとトークンが環境変数 `SLACK_CLI_TOKEN` に設定される。
-
-### ターミナルでの使い方
-
-| コマンド | 操作 |
-|---|---|
-| `slack-read` | fzf でチャンネルを選択してメッセージ一覧を表示 |
-| `slack-read <channel_id> <limit>` | チャンネルIDと件数を直接指定 |
-| `slack-thread` | fzf でチャンネル→メッセージを選択してスレッド返信を表示 |
-| `slack-send` | fzf でチャンネルを選択してメッセージを送信 |
-| `slack-send "text"` | テキストを引数で直接渡して送信 |
-| `slack-users-refresh` | ユーザー名キャッシュ（`/tmp/slack-users.json`）を強制更新 |
-
-### Neovim での使い方
-
-Telescope を使ったインタラクティブなスレッド閲覧・返信 UI。
-
-| キー | 操作 |
-|---|---|
-| `<leader>sc` | Telescope でチャンネル → メッセージを選択してスレッドを開く |
-| `<leader>sr` | 現在のスレッドを最新状態に更新 |
-| `<leader>ss` | バッファの内容をスレッドに返信として送信 |
-| `:w` | 同上（`:w` で送信） |
-
-**チャンネルリストのカスタマイズ（`~/.config/slack/channels.json`）：**
-
-`<leader>sc` はこのファイルが存在すればそこから読み込む（API 呼び出しなしで即座に開く）。
-ファイルがない場合は参加済みチャンネルを API から取得する。
-
-```json
-[
-  {"id": "C01234567", "name": "general"},
-  {"id": "C89012345", "name": "random"}
-]
-```
-
-チャンネル ID は Slack の URL（`slack://channel?id=C...`）またはチャンネル詳細画面で確認できる。
-
-**UI の見た目（git commit メッセージスタイル）：**
-
-```
-ここに返信を書く
-
-# ── ここより上の内容を送信します ──────────────────────────────
-# channel : #general
-#
-# 12/01 10:30  たいてっく (U0ACHC1D9T6)
-#   最新の返信内容
-#
-# 12/01 10:00  kouhei (U12345678)
-#   その前の返信
-#
-# ━━━ スレッド元 ━━━
-# 11/30 09:00  たいてっく (U0ACHC1D9T6)
-#   スレッドの最初のメッセージ
-```
-
-区切り線より上に返信を書いて `:w` で送信。スレッド履歴は `#` コメントとして表示され、新しい順に並ぶ。
-
 ## 構成
 
 ```
@@ -284,7 +187,6 @@ nix-config/
 │   ├── git.nix          # Git
 │   ├── gh.nix           # GitHub CLI
 │   ├── neovim.nix       # Neovim（プラグイン宣言のみ）
-│   ├── slack.nix        # Slack CLI・環境変数（SLACK_CLI_TOKEN）
 │   └── zsh.nix          # zsh・Starship
 ├── claude/
 │   └── statusline.sh    # Claude Codeステータスライン（~/.config/claude/にリンク）
@@ -296,7 +198,6 @@ nix-config/
         ├── neo-tree.lua     # ファイルツリー
         ├── telescope.lua    # fuzzy finder
         ├── lualine.lua      # ステータスライン・カスタムタブライン
-        ├── slack.lua        # Slack TUI（Telescope + スレッド返信バッファ）
         ├── toggleterm.lua   # フローティングターミナル
         ├── winresizer.lua   # ウィンドウリサイズ
         └── claudecode.lua   # Claude Code連携
