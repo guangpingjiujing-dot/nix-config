@@ -59,6 +59,7 @@
     (lib.hiPrio kubectl) # Kubernetes CLI（minikube 同梱の kubectl と衝突するため優先）
     sqlite             # SQLite CLI（sqlite3 コマンド）
     sling              # ELT ツール（データベース・ファイル間のデータ移動）
+    slack-cli          # Slack 公式 CLI（slack コマンド。Slack アプリの開発・デプロイ）
     ollama             # ローカル LLM ランタイム（ollama serve / ollama run）
     opencode           # ターミナル向け AI コーディングエージェント
     antigravity-cli    # Google Antigravity CLI（agy コマンド。個人向け Gemini CLI の後継）

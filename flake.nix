@@ -49,6 +49,8 @@
         overlays = [
           (final: prev: {
             sling = prev.callPackage ./pkgs/sling { };
+            # nixpkgs の slack-cli（rockymadden 版・更新停止）を Slack 公式 CLI で置き換える
+            slack-cli = prev.callPackage ./pkgs/slack-cli { };
             hunk = hunk.packages.${local.system}.default;
             claude-code = pkgsClaude.claude-code;
           })
