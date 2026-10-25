@@ -13,6 +13,7 @@
     ./modules/qiita.nix
     ./modules/vercel.nix
     ./modules/nvm.nix
+    ./modules/vscode.nix
     ./modules/zenn.nix
     ./modules/zsh.nix
   ];
