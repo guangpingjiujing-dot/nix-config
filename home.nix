@@ -59,6 +59,7 @@
     minikube           # ローカル Kubernetes クラスタ
     (lib.hiPrio kubectl) # Kubernetes CLI（minikube 同梱の kubectl と衝突するため優先）
     sqlite             # SQLite CLI（sqlite3 コマンド）
+    duckdb             # DuckDB CLI（分析向け組み込み DB。duckdb コマンド）
     sling              # ELT ツール（データベース・ファイル間のデータ移動）
     slack-cli          # Slack 公式 CLI（slack コマンド。Slack アプリの開発・デプロイ）
     ollama             # ローカル LLM ランタイム（ollama serve / ollama run）

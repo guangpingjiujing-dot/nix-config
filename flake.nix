@@ -53,6 +53,7 @@
             slack-cli = prev.callPackage ./pkgs/slack-cli { };
             hunk = hunk.packages.${local.system}.default;
             claude-code = pkgsClaude.claude-code;
+            antigravity-cli = prev.callPackage ./pkgs/antigravity-cli { };
           })
         ];
       };
