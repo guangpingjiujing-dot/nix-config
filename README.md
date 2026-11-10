@@ -60,7 +60,7 @@ home-manager switch --flake path:$(pwd)
 
 ```json
 {
-  "theme": "dark",
+  "theme": "light",
   "verbose": true,
   "statusLine": {
     "type": "command",

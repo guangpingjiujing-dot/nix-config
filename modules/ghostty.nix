@@ -26,7 +26,7 @@
 
       # カラーテーマ（Ghostty組み込みのテーマ名を指定）
       # 利用可能なテーマ一覧: ghostty +list-themes
-      theme = "TokyoNight Night";
+      theme = "GitHub Light Colorblind";
 
       # 不透明度とぼかし
       background-opacity = 100;

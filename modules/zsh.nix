@@ -19,7 +19,10 @@
 
     # 過去のコマンド履歴をグレーでサジェストしてくれる
     # →キーで補完、Ctrl+Fで一語補完
-    autosuggestion.enable = true;
+    autosuggestion = {
+      enable = true;
+      highlight = "fg=246";
+    };
 
     # エイリアス（コマンドの短縮形）
     shellAliases = {

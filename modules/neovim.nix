@@ -24,6 +24,7 @@
       venv-selector-nvim  # Python 仮想環境をインタラクティブに選択
 
       tokyonight-nvim
+      github-nvim-theme  # Github風のthema
 
       neo-tree-nvim
       plenary-nvim       # neo-tree の依存ライブラリ

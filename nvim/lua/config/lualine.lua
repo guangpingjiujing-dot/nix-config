@@ -1,10 +1,6 @@
-local theme = require("lualine.themes.tokyonight")
--- Make inactive statusline background clearly distinct from editor background
-theme.inactive.c = { bg = "#24283b", fg = "#565f89" }
-
 require("lualine").setup({
   options = {
-    theme = theme,
+    theme = 'auto',
   },
   sections = {
     lualine_c = {
