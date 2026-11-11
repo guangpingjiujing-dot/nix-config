@@ -30,7 +30,7 @@
     };
   };
 
-  outputs = { nixpkgs, nixpkgs-claude, home-manager, hunk, ... }:
+  outputs = { nixpkgs, nixpkgs-claude, home-manager, hunk, ... }@inputs:
     let
       # マシン固有の設定（ユーザー名・ホームディレクトリ・アーキテクチャ）
       # クローン後に local.nix を自分の環境に合わせて編集する（README 参照）。
@@ -65,7 +65,10 @@
         inherit pkgs;
 
         # マシン固有の値を各モジュールへ渡す
-        extraSpecialArgs = { inherit (local) username homeDirectory gitName gitEmail; };
+        extraSpecialArgs = { 
+	  inherit (local) username homeDirectory gitName gitEmail;
+          inherit inputs;     
+	};
 
         # 読み込む設定ファイル
         # home.nixがルートで、そこから各モジュールをimportする

@@ -10,6 +10,7 @@
     ./modules/git.nix
     ./modules/java.nix
     ./modules/neovim.nix
+    ./modules/hunk.nix
     ./modules/qiita.nix
     ./modules/vercel.nix
     ./modules/nvm.nix
