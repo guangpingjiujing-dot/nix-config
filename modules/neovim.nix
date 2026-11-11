@@ -68,6 +68,16 @@
           hash = "sha256-/jk38ebxKTlyH3AsrSQWMl/cErmu6threyy/MIrdzD4=";
         };
       })
+
+      (pkgs.vimUtils.buildVimPlugin {
+        name = "markdown-table-wrap-nvim";
+        src = pkgs.fetchFromGitHub {
+          owner = "ice345";
+          repo = "markdown-table-wrap.nvim";
+          rev = "v1.0.0";
+          hash = "sha256-VB2s1r/Lj1p5koM8OOpygxE/Ta9u9bryicolxVSA7G0=";
+        };
+      })
     ];
 
   };
