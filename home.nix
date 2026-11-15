@@ -67,7 +67,6 @@
     opencode           # ターミナル向け AI コーディングエージェント
     antigravity-cli    # Google Antigravity CLI（agy コマンド。個人向け Gemini CLI の後継）
     marp-cli           # Markdown → スライド変換 CLI（marp コマンド）
-    hunk               # レビュー志向のターミナル diff ビューア（hunk コマンド）
     ffmpeg             # 動画・音声の変換／編集 CLI（ffmpeg, ffprobe コマンド）
     nerd-fonts.jetbrains-mono  # JetBrainsMono Nerd Font（Ghostty・Neovim のアイコン表示に必要）
 

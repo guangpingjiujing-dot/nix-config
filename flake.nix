@@ -23,14 +23,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # hunk: レビュー志向のターミナル diff ビューア（nixpkgs に無いため公式 flake を利用）
+    # hunk: レビュー志向のターミナル diff ビューア（Home Manager モジュールを利用するために公式 flake を参照）
     hunk = {
       url = "github:modem-dev/hunk";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { nixpkgs, nixpkgs-claude, home-manager, hunk, ... }@inputs:
+  outputs = { nixpkgs, nixpkgs-claude, home-manager, hunk, ... }:
     let
       # マシン固有の設定（ユーザー名・ホームディレクトリ・アーキテクチャ）
       # クローン後に local.nix を自分の環境に合わせて編集する（README 参照）。
@@ -51,7 +51,6 @@
             sling = prev.callPackage ./pkgs/sling { };
             # nixpkgs の slack-cli（rockymadden 版・更新停止）を Slack 公式 CLI で置き換える
             slack-cli = prev.callPackage ./pkgs/slack-cli { };
-            hunk = hunk.packages.${local.system}.default;
             claude-code = pkgsClaude.claude-code;
             antigravity-cli = prev.callPackage ./pkgs/antigravity-cli { };
           })
@@ -65,14 +64,14 @@
         inherit pkgs;
 
         # マシン固有の値を各モジュールへ渡す
-        extraSpecialArgs = { 
-	  inherit (local) username homeDirectory gitName gitEmail;
-          inherit inputs;     
-	};
+        extraSpecialArgs = { inherit (local) username homeDirectory gitName gitEmail; };
 
         # 読み込む設定ファイル
         # home.nixがルートで、そこから各モジュールをimportする
-        modules = [ ./home.nix ];
+        modules = [
+          ./home.nix
+          hunk.homeManagerModules.default
+        ];
       };
 
       # `nix run .#home-manager -- switch --flake .` で使えるようにする
