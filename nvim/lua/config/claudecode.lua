@@ -3,6 +3,15 @@ require("claudecode").setup({
     open_in_new_tab = true,
     hide_terminal_in_new_tab = false,
   },
+  terminal = {
+    snacks_win_opts = {
+      wo = {
+        number = true,
+        relativenumber = true,
+        statuscolumn = "%=%#LineNr#%{printf('%3d', v:lnum)} %#RelLineNr#%{printf('%2d', v:relnum)}%s",
+      },
+    },
+  },
 })
 
 -- Single-pane display for new file creation (no empty "before" pane)

@@ -44,11 +44,13 @@ vim.keymap.set("n", "<leader>yn", function() vim.fn.setreg("+", vim.fn.expand("%
 vim.keymap.set("n", "<leader>yp", function() vim.fn.setreg("+", vim.fn.expand("%:.")) end, { desc = "Yank relative path" })
 vim.keymap.set("n", "<leader>yP", function() vim.fn.setreg("+", vim.fn.expand("%:p")) end, { desc = "Yank absolute path" })
 
+local statuscolumn_format = "%=%#LineNr#%{printf('%3d', v:lnum)} %#RelLineNr#%{printf('%2d', v:relnum)}%s"
+
 -- 絶対行番号と相対行番号を両方表示する
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.api.nvim_set_hl(0, "RelLineNr", { fg = "#7aa2f7" })
-vim.opt.statuscolumn = "%=%#LineNr#%{printf('%3d', v:lnum)} %#RelLineNr#%{printf('%2d', v:relnum)}%s"
+vim.opt.statuscolumn = statuscolumn_format
 
 -- サインカラムを常に表示（gitsigns 等のサインが消えないようにする）
 vim.opt.signcolumn = "yes:1"
@@ -83,11 +85,23 @@ vim.api.nvim_create_autocmd({ "InsertLeave", "TermLeave", "WinEnter", "FocusGain
 vim.api.nvim_create_autocmd("TermOpen", {
   pattern = "*",
   callback = function()
-    vim.opt_local.number = false
-    vim.opt_local.relativenumber = false
-    vim.opt_local.statuscolumn = ""
+    vim.opt_local.number = true
+    vim.opt_local.relativenumber = true
+    vim.opt_local.statuscolumn = statuscolumn_format
   end,
 })
+
+-- snacks.nvim が読み込まれている場合は terminal スタイルにも適用
+local snacks_ok, Snacks = pcall(require, "snacks")
+if snacks_ok then
+  Snacks.config.style("terminal", {
+    wo = {
+      number = true,
+      relativenumber = true,
+      statuscolumn = statuscolumn_format,
+    },
+  })
+end
 
 -- 外部でファイルが変更されたとき自動的にリロードする
 vim.opt.autoread = true
